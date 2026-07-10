@@ -32,8 +32,6 @@ export async function promptForMissing(
         value = await password({
           message,
           mask: "*",
-          // Default values for sensitive fields are masked but supported.
-          default: variable.defaultValue,
         })
       } else {
         value = await input({
