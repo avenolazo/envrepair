@@ -182,6 +182,7 @@ No. `envrepair` is designed for local development. In CI environments it skips p
 | **Interactive typed input prompts**                        |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
 | **Schema-based validation (Zod, etc.)**                    |     ❌      |      ❌       |      ❌       |    ❌     |    ✅    |
 
+> [!NOTE]
 > `envrepair` focuses on interactive environment setup and automatic repair before your application starts. Tools like `t3-env` and `envalid` focus on validating environment variables inside your application at runtime. These tools solve different problems and can be used together.
 
 ## Why Not Just Use...?
