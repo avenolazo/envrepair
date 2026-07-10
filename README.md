@@ -108,10 +108,10 @@ $ envrepair next dev
 ```
 
 <details>
-  <summary><strong>🎥 View Full Video Walkthrough</strong></summary>
+  <summary><strong>View Full Video Walkthrough</strong></summary>
   <br />
   <p align="center">
-    <video src="https://raw.githubusercontent.com/avenolazo/envrepair/main/assets/demo.mp4" controls width="100%"></video>
+    <video src="assets/demo.mp4" controls width="100%"></video>
   </p>
 </details>
 
