@@ -24,8 +24,8 @@
 <p align="center">
   <a href="#installation">Installation</a> •
   <a href="#quick-start">Quick Start</a> •
-  <a href="#why-envrepair">Why?</a> •
   <a href="#features">Features</a> •
+  <a href="#comparison">Comparison</a> •
   <a href="#command-reference">Command Reference</a>
 </p>
 
@@ -82,7 +82,7 @@ Whenever this command is run, `envrepair` will:
 
 1. **Scan**: Compares your local `.env` (or `.env.local`) against `.env.example`.
 2. **Prompt & Validate**: Interactively prompts you in the terminal for any missing keys, validating formats (like numbers, URLs, and emails) and masking sensitive credentials.
-3. **Save**: Appends the new variables to your `.env` file safely, preserving all of your existing comments, layout groupings, and empty lines.
+3. **Save**: Appends the new variables to your `.env` file safely, preserving all of your existing comments, spacing, blank lines, and ordering.
 4. **Spawn**: Instantly starts your target command (`next dev`) as a transparent child process, passing signals (like `Ctrl+C`) and exit codes down to the shell.
 
 **Example session:**
@@ -103,6 +103,14 @@ $ envrepair next dev
 > next dev
 ```
 
+## Features
+
+- **Preserves your `.env` exactly as you organized it.** Comments, spacing, blank lines, and ordering stay intact.
+- **Rejects invalid formats before they reach your application.** Validates URLs, emails, numbers, and booleans in real-time using `# @type` annotations in your template.
+- **Masks credentials automatically.** Any key matching common sensitive patterns (PASSWORD, SECRET, TOKEN, KEY, etc.) is prompted with hidden input.
+- Behaves like your original command. `Ctrl+C`, exit codes, and terminal output work exactly as expected.
+- Automatically detects CI environments and exits with status 1 instead of hanging on interactive prompts.
+
 ## Why `envrepair`?
 
 Managing `.env` files across a team is a consistent source of friction:
@@ -112,6 +120,54 @@ Managing `.env` files across a team is a consistent source of friction:
 - Basic sync scripts copy keys with empty values, destroying your comments, custom spacing, and file organization.
 
 `envrepair` runs at the process level, requiring zero code changes. It detects missing variables, prompts you to repair them interactively with real-time validation, and preserves 100% of your `.env` layout before spawning your target command.
+
+## How It Works
+
+```
+.env.example
+      │
+      ▼
+Compare with .env
+      │
+ Missing keys?
+  ┌───┴───┐
+  │       │
+Prompt  Launch
+  │
+Update .env
+  │
+Launch
+```
+
+## Works With
+
+`envrepair` wraps any development command. It is not tied to a specific framework or runtime.
+
+```
+next dev      node server.js    vite
+npm run dev   bun run dev       astro dev
+nest start    remix dev         python manage.py runserver
+```
+
+## Smart Type Validation
+
+Add `# @type <type>` annotations to `.env.example` to validate inputs during prompts. Supported types: `string`, `number`, `boolean`, `url`, `email`.
+
+```env
+# Backend port number
+# @type number
+PORT=3000
+
+# Third-party service credentials
+# @type url
+API_BASE_URL=
+
+# Admin contact address
+# @type email
+ADMIN_EMAIL=
+```
+
+Invalid inputs are rejected immediately with a format hint before the prompt repeats.
 
 ## Comparison
 
@@ -140,82 +196,17 @@ These are runtime schema validators that live inside your application code. They
 
 ### sync-dotenv
 
-`sync-dotenv` automatically copies missing keys from `.env.example` into `.env` with empty values. It does not prompt you to fill them in, and it destroys your existing comments, spacing, and layout in the process.
+`sync-dotenv` automatically copies missing keys from `.env.example` into `.env` with empty values. It does not prompt you to fill them in, and it destroys your existing comments, spacing, and ordering in the process.
 
-## Features
+## FAQ
 
-- **Preserves your `.env` exactly as you organized it.** Comments, spacing, blank lines, and ordering stay intact.
-- **Rejects invalid formats before they reach your application.** Validates URLs, emails, numbers, and booleans in real-time using `# @type` annotations in your template.
-- **Masks credentials automatically.** Any key matching common sensitive patterns (PASSWORD, SECRET, TOKEN, KEY, etc.) is prompted with hidden input.
-- Behaves like your original command. `Ctrl+C`, exit codes, and terminal output work exactly as expected.
-- Automatically detects CI environments and exits with status 1 instead of hanging on interactive prompts.
+**Does `envrepair` overwrite existing values?**
 
-## How It Works
+No. Only variables that are missing from your `.env` are appended. Existing values are never modified.
 
-```
-envrepair next dev
-        │
-        ▼
- Read .env.example
-        │
-        ▼
-  Compare to .env
-        │
-   Missing keys?
-  ┌─────┴─────┐
- Yes          No
-  │            │
-  ▼            ▼
-Prompt      Launch next dev
-  │
-  ▼
-Write to .env
-  │
-  ▼
-Launch next dev
-```
+**Is this intended for production?**
 
-## Works With
-
-`envrepair` wraps any development command. It is not tied to a specific framework or runtime.
-
-```
-next dev      node server.js    vite
-npm run dev   bun run dev       astro dev
-nest start    remix dev         python manage.py runserver
-```
-
-## Smart Type Validation
-
-`envrepair` allows you to enforce type validation for missing variables directly in `.env.example` using `# @type <validationType>` comment annotations.
-
-### Supported Types
-
-- **`number`** (or `int`, `integer`): Rejects any input that is not a valid number.
-- **`boolean`** (or `bool`): Accepts `true`, `false`, `yes`, `no`, `1`, or `0`.
-- **`url`** (or `uri`): Validates that the input is a valid absolute URL (e.g., `https://api.example.com`).
-- **`email`**: Checks for standard email address format (e.g., `user@domain.com`).
-- **`string`**: Default plaintext validation.
-
-### Example
-
-In `.env.example`:
-
-```env
-# Backend port number
-# @type number
-PORT=3000
-
-# Third-party service credentials
-# @type url
-API_BASE_URL=
-
-# Admin contact address
-# @type email
-ADMIN_EMAIL=
-```
-
-When `envrepair` prompts for these variables, it hides the `@type` annotation line from the prompt so the description stays clean. Invalid inputs are rejected immediately with a format hint before the prompt repeats.
+No. `envrepair` is designed for local development. In CI environments it skips prompts entirely and exits with status 1 if variables are missing, so it integrates cleanly into pipelines without hanging.
 
 ## Command Reference
 
