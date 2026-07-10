@@ -31,7 +31,7 @@
 
 ---
 
-`envrepair` validates your active `.env` file against `.env.example` before running your startup scripts. If variables are missing, the tool prompts for their values interactively in the terminal (masking credentials) and appends them to `.env` while preserving all comments, blank lines, and formatting.
+Stop crashing your development server because a teammate added a new environment variable. `envrepair` compares your active `.env` against `.env.example`, repairs missing variables interactively, then launches your command — preserving comments, spacing, blank lines, and ordering in your `.env` file.
 
 ## Installation
 
@@ -85,6 +85,24 @@ Whenever this command is run, `envrepair` will:
 3. **Save**: Appends the new variables to your `.env` file safely, preserving all of your existing comments, layout groupings, and empty lines.
 4. **Spawn**: Instantly starts your target command (`next dev`) as a transparent child process, passing signals (like `Ctrl+C`) and exit codes down to the shell.
 
+**Example session:**
+
+```
+$ envrepair next dev
+
+  Missing 2 required environment variable(s)
+
+  DATABASE_URL
+    Enter value: postgres://localhost/mydb
+
+  API_SECRET_TOKEN
+    Enter value (hidden): **************
+
+  Appended 2 repaired variable(s) to .env.
+
+> next dev
+```
+
 ## Why `envrepair`?
 
 Managing `.env` files across a team is a consistent source of friction:
@@ -126,10 +144,10 @@ These are runtime schema validators that live inside your application code. They
 
 ## Features
 
-- **Never destroys your carefully organized `.env` file.** Appends new keys without touching existing comments, blank lines, or ordering.
+- **Preserves your `.env` exactly as you organized it.** Comments, spacing, blank lines, and ordering stay intact.
 - **Rejects invalid formats before they reach your application.** Validates URLs, emails, numbers, and booleans in real-time using `# @type` annotations in your template.
 - **Masks credentials automatically.** Any key matching common sensitive patterns (PASSWORD, SECRET, TOKEN, KEY, etc.) is prompted with hidden input.
-- Runs target processes transparently, forwarding exit codes and POSIX signals.
+- Behaves like your original command. `Ctrl+C`, exit codes, and terminal output work exactly as expected.
 - Automatically detects CI environments and exits with status 1 instead of hanging on interactive prompts.
 
 ## How It Works
@@ -155,6 +173,16 @@ Write to .env
   │
   ▼
 Launch next dev
+```
+
+## Works With
+
+`envrepair` wraps any development command. It is not tied to a specific framework or runtime.
+
+```
+next dev      node server.js    vite
+npm run dev   bun run dev       astro dev
+nest start    remix dev         python manage.py runserver
 ```
 
 ## Smart Type Validation
