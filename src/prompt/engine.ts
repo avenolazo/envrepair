@@ -2,8 +2,9 @@ import { input, password } from "@inquirer/prompts"
 import type { MissingVariable } from "../core/types.js"
 import { isCI } from "../utils/ci.js"
 
-function createValidator(variable: MissingVariable) {
-  return (value: string): boolean | string => {
+const createValidator =
+  (variable: MissingVariable) =>
+  (value: string): boolean | string => {
     if (!value && variable.defaultValue !== undefined) {
       return true
     }
@@ -39,7 +40,6 @@ function createValidator(variable: MissingVariable) {
 
     return true
   }
-}
 
 /**
  * Interactively prompts the developer for values of missing environment variables.
@@ -50,9 +50,9 @@ function createValidator(variable: MissingVariable) {
  * @param missing - List of missing variables to prompt for.
  * @returns List of key-value pairs containing the developer's inputs.
  */
-export async function promptForMissing(
+export const promptForMissing = async (
   missing: MissingVariable[],
-): Promise<Array<{ key: string; value: string }>> {
+): Promise<Array<{ key: string; value: string }>> => {
   if (missing.length === 0 || isCI()) {
     return []
   }

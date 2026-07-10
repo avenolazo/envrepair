@@ -2,7 +2,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import type { WriterOptions } from "./types.js"
 
-function formatEnvValue(value: string): string {
+const formatEnvValue = (value: string): string => {
   const needsQuoting = /[\s'"#\n\r]/.test(value)
   if (needsQuoting) {
     return `"${value
@@ -23,11 +23,11 @@ function formatEnvValue(value: string): string {
  * @param entries - List of key-value pairs to write.
  * @param options - Configure append behaviour (e.g. customized separator message).
  */
-export async function appendVariables(
+export const appendVariables = async (
   filePath: string,
   entries: Array<{ key: string; value: string }>,
   options?: WriterOptions,
-): Promise<void> {
+): Promise<void> => {
   if (entries.length === 0) {
     return
   }

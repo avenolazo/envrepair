@@ -10,7 +10,7 @@ const FORWARDED_SIGNALS = ["SIGINT", "SIGTERM", "SIGHUP"] as const
  * @param command - Executable name or binary path.
  * @param args - Arguments list to pass to the executable.
  */
-export function launchProcess(command: string, args: string[]): void {
+export const launchProcess = (command: string, args: string[]): void => {
   const child = spawn(command, args, { stdio: "inherit" })
 
   for (const signal of FORWARDED_SIGNALS) {

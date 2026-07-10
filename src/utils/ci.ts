@@ -4,15 +4,12 @@
  *
  * @returns True if running inside a known CI/CD environment, false otherwise.
  */
-export function isCI(): boolean {
-  return (
-    process.env.CI === "true" ||
-    process.env.GITHUB_ACTIONS === "true" ||
-    process.env.GITLAB_CI === "true" ||
-    process.env.CIRCLECI === "true" ||
-    process.env.JENKINS_URL !== undefined ||
-    process.env.BUILDKITE === "true" ||
-    process.env.TF_BUILD === "True" ||
-    process.env.CODEBUILD_BUILD_ID !== undefined
-  )
-}
+export const isCI = (): boolean =>
+  process.env.CI === "true" ||
+  process.env.GITHUB_ACTIONS === "true" ||
+  process.env.GITLAB_CI === "true" ||
+  process.env.CIRCLECI === "true" ||
+  process.env.JENKINS_URL !== undefined ||
+  process.env.BUILDKITE === "true" ||
+  process.env.TF_BUILD === "True" ||
+  process.env.CODEBUILD_BUILD_ID !== undefined

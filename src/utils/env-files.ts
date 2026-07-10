@@ -22,7 +22,7 @@ export interface EnvFilePaths {
  * @param cwd - Working directory to search, defaults to process.cwd().
  * @returns Object containing absolute paths to the environment files.
  */
-export async function findEnvFiles(cwd: string = process.cwd()): Promise<EnvFilePaths> {
+export const findEnvFiles = async (cwd: string = process.cwd()): Promise<EnvFilePaths> => {
   const envLocalPath = path.resolve(cwd, ".env.local")
   const envPath = path.resolve(cwd, ".env")
   const examplePath = path.resolve(cwd, ".env.example")
@@ -42,7 +42,7 @@ export async function findEnvFiles(cwd: string = process.cwd()): Promise<EnvFile
  * @param filePath - Path to check.
  * @returns True if the file exists and is accessible, false otherwise.
  */
-export async function fileExists(filePath: string): Promise<boolean> {
+export const fileExists = async (filePath: string): Promise<boolean> => {
   try {
     await fs.access(filePath)
     return true

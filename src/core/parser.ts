@@ -3,7 +3,7 @@ import type { EnvDocument } from "./types.js"
 
 const VARIABLE_REGEX = /^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/
 
-function stripBOM(content: string): string {
+const stripBOM = (content: string): string => {
   // Prevent Byte Order Mark (BOM) characters from corrupting the first parsed key name.
   if (content.charCodeAt(0) === 0xfeff) {
     return content.slice(1)
@@ -11,7 +11,7 @@ function stripBOM(content: string): string {
   return content
 }
 
-function extractValue(rawValue: string): string {
+const extractValue = (rawValue: string): string => {
   const trimmed = rawValue.trim()
 
   if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
@@ -43,7 +43,7 @@ function extractValue(rawValue: string): string {
  * @param filePath - The path to the env file to parse.
  * @returns An ordered array of parsed line objects.
  */
-export async function parseEnv(filePath: string): Promise<EnvDocument> {
+export const parseEnv = async (filePath: string): Promise<EnvDocument> => {
   const rawContent = await fs.readFile(filePath, "utf-8")
   const content = stripBOM(rawContent)
   const rawLines = content.split("\n")
@@ -99,7 +99,7 @@ export async function parseEnv(filePath: string): Promise<EnvDocument> {
  * @param doc - The parsed env document.
  * @returns A Map containing variable keys and their extracted values.
  */
-export function extractVariables(doc: EnvDocument): Map<string, string> {
+export const extractVariables = (doc: EnvDocument): Map<string, string> => {
   const variables = new Map<string, string>()
   for (const line of doc) {
     if (line.type === "variable" && line.key !== undefined) {

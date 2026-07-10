@@ -16,18 +16,18 @@ const SENSITIVE_PATTERNS = [
   "SIGNATURE",
 ] as const
 
-function isSensitiveKey(key: string): boolean {
+const isSensitiveKey = (key: string): boolean => {
   const upper = key.toUpperCase()
   return SENSITIVE_PATTERNS.some((pattern) => upper.includes(pattern))
 }
 
-function parseCommentBlock(
+const parseCommentBlock = (
   doc: EnvDocument,
   index: number,
 ): {
   description?: string
   validationType?: "number" | "boolean" | "url" | "email" | "string"
-} {
+} => {
   const commentLines: string[] = []
   for (let j = index - 1; j >= 0; j--) {
     const line = doc[j]
@@ -82,7 +82,7 @@ function parseCommentBlock(
  * @param actual - The parsed active environment (.env) document.
  * @returns A structured diff containing missing, unused, and synced variables.
  */
-export function compareEnvs(example: EnvDocument, actual: EnvDocument): DiffResult {
+export const compareEnvs = (example: EnvDocument, actual: EnvDocument): DiffResult => {
   const actualVars = extractVariables(actual)
   const exampleVars = extractVariables(example)
 
