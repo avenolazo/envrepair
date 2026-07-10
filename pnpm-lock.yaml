@@ -259,32 +259,31 @@ settings:
 
 importers:
   .:
-    dependencies:
-      "@inquirer/prompts":
-        specifier: ^8.5.2
-        version: 8.5.2(@types/node@26.1.1)
-      commander:
-        specifier: ^15.0.0
-        version: 15.0.0
-      cross-spawn:
-        specifier: ^7.0.6
-        version: 7.0.6
-      picocolors:
-        specifier: ^1.1.1
-        version: 1.1.1
     devDependencies:
       "@eslint/js":
         specifier: ^9.39.4
         version: 9.39.4
+      "@inquirer/prompts":
+        specifier: ^8.5.2
+        version: 8.5.2(@types/node@26.1.1)
       "@types/cross-spawn":
         specifier: ^6.0.6
         version: 6.0.6
       "@types/node":
         specifier: ^26.1.1
         version: 26.1.1
+      commander:
+        specifier: ^15.0.0
+        version: 15.0.0
+      cross-spawn:
+        specifier: ^7.0.6
+        version: 7.0.6
       eslint:
         specifier: ^9.39.4
         version: 9.39.4
+      picocolors:
+        specifier: ^1.1.1
+        version: 1.1.1
       prettier:
         specifier: ^3.9.4
         version: 3.9.4
