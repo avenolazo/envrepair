@@ -31,7 +31,7 @@
 
 ---
 
-Stop crashing your development server because your `.env` is out of sync with `.env.example`. EnvRepair compares your active `.env` against the template, repairs missing variables interactively, then launches your command — preserving comments, spacing, blank lines, and ordering.
+Stop crashing your development server because your `.env` is out of sync with `.env.example`. envrepair compares your active `.env` against the template, repairs missing variables interactively, then launches your command — preserving comments, spacing, blank lines, and ordering.
 
 ## Installation
 
