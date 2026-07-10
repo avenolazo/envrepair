@@ -35,8 +35,6 @@ Stop crashing your development server because your `.env` is out of sync with `.
 
 <p align="center">
   <img src="assets/demo.gif" alt="envrepair demo" width="600">
-  <br />
-  <a href="assets/demo.mp4">Watch the full walkthrough video</a>
 </p>
 
 ## Installation
@@ -108,6 +106,12 @@ $ envrepair next dev
 
 > next dev
 ```
+
+## Video Walkthrough
+
+<p align="center">
+  <video src="assets/walkthrough.mp4" width="100%" controls></video>
+</p>
 
 ## Features
 
