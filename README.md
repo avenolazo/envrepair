@@ -107,13 +107,11 @@ $ envrepair next dev
 > next dev
 ```
 
-<details>
-  <summary><strong>View Full Video Walkthrough</strong></summary>
-  <br />
-  <p align="center">
-    <video src="assets/demo.mp4" controls width="100%"></video>
-  </p>
-</details>
+## Video Walkthrough
+
+<p align="center">
+  <video src="assets/demo.mp4" controls width="100%"></video>
+</p>
 
 ## Features
 
