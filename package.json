@@ -1,0 +1,50 @@
+{
+  "name": "envrepair",
+  "version": "0.1.0",
+  "description": "Self-healing environment configuration manager for local development",
+  "type": "module",
+  "main": "./dist/cli.js",
+  "bin": {
+    "envrepair": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "env",
+    "dotenv",
+    "environment",
+    "cli",
+    "developer-tools",
+    "self-healing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.4.0",
+      "onFail": "download"
+    }
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^8.5.2",
+    "commander": "^15.0.0",
+    "cross-spawn": "^7.0.6",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsup": "^8.5.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}
