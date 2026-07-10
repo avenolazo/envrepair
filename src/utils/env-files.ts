@@ -23,9 +23,15 @@ export interface EnvFilePaths {
  * @returns Object containing absolute paths to the environment files.
  */
 export async function findEnvFiles(cwd: string = process.cwd()): Promise<EnvFilePaths> {
+  const envLocalPath = path.resolve(cwd, '.env.local');
+  const envPath = path.resolve(cwd, '.env');
+  const examplePath = path.resolve(cwd, '.env.example');
+
+  const hasEnvLocal = await fileExists(envLocalPath);
+
   return {
-    env: path.resolve(cwd, '.env'),
-    example: path.resolve(cwd, '.env.example'),
+    env: hasEnvLocal ? envLocalPath : envPath,
+    example: examplePath,
   };
 }
 

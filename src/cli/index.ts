@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { fileExists } from '../utils/env-files.js';
+import { findEnvFiles, fileExists } from '../utils/env-files.js';
 import { compareEnvs } from '../core/differ.js';
 import { appendVariables } from '../core/writer.js';
 import { loadAndParseEnvs } from './loader.js';
@@ -8,14 +8,15 @@ import { launchProcess } from '../runner/proxy.js';
 import { isCI } from '../utils/ci.js';
 import { log } from '../utils/logger.js';
 
+const defaults = await findEnvFiles();
 const program = new Command();
 
 program
   .name('envrepair')
   .description('Self-healing environment configuration manager for local development')
   .version('0.1.0')
-  .option('-e, --env <path>', 'Path to the environment file', '.env')
-  .option('-x, --example <path>', 'Path to the example template file', '.env.example');
+  .option('-e, --env <path>', 'Path to the environment file', defaults.env)
+  .option('-x, --example <path>', 'Path to the example template file', defaults.example);
 
 program
   .command('doctor')
@@ -100,8 +101,8 @@ if (rawArgs.length === 0) {
 }
 
 // Parse configuration paths prior to command routing.
-let envPath = '.env';
-let examplePath = '.env.example';
+let envPath = defaults.env;
+let examplePath = defaults.example;
 const commandArgs: string[] = [];
 
 for (let i = 0; i < rawArgs.length; i++) {
