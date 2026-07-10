@@ -23,7 +23,7 @@ export function launchProcess(command: string, args: string[]): void {
     })
   }
 
-  child.on("close", (code, signal) => {
+  child.on("close", (code: number | null, signal: NodeJS.Signals | null) => {
     if (signal) {
       process.kill(process.pid, signal)
     } else {
