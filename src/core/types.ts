@@ -75,3 +75,18 @@ export interface MissingVariable {
    */
   description?: string;
 }
+
+/**
+ * Configuration options for formatting and appending to .env files.
+ */
+export interface WriterOptions {
+  /**
+   * Custom comment divider separating original content from new appends.
+   * Defaults to '# --- Added by envrepair ---'.
+   */
+  separator?: string;
+  /**
+   * When true, creates the destination file and missing directories if they do not exist.
+   */
+  createIfMissing?: boolean;
+}
