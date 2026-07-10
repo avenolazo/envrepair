@@ -1,112 +1,120 @@
 # envrepair
 
-> Self-healing environment configuration manager for local development.
+An environment configuration manager for local development.
 
-`envrepair` is a lightweight CLI utility that sits in front of your local startup scripts. It ensures your active `.env` file is fully aligned with `.env.example` before starting your application. If variables are missing, it repairs them interactively in your terminal and starts your app without context switching or manual file editing.
+`envrepair` is a command line tool that validates your active `.env` file against `.env.example` before launching your application process. If any variables are missing, the tool prompts for their values interactively in the terminal (masking sensitive fields) and updates `.env` without modifying existing formatting, comments, or blank lines.
 
----
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Command Reference](#command-reference)
+- [Options](#options)
+- [CI/CD Integration](#cicd-integration)
+- [Technical Architecture and Design](#technical-architecture-and-design)
+- [License](#license)
 
 ## Features
 
-- **Format-Preserving Parser**: Retains existing formatting, blank lines, and comments in your `.env` files.
-- **Interactive Repair Loop**: Prompts for missing fields and masks sensitive entries (API keys, secrets, passwords).
-- **Zero Configuration**: Infers settings automatically from your current directory.
-- **Transparent Process Proxying**: Forwards signals (Ctrl+C, termination) and exit codes to target commands.
-- **CI-Safe Validation**: Silent mode designed for continuous integration checks.
-
----
+- **Format preservation**: Parses env documents into structured line arrays, preserving comments, spacing, and ordering when writing new variables.
+- **Interactive inputs**: Collects missing variables in the terminal and uses masked inputs for sensitive key patterns (passwords, tokens, keys).
+- **Process proxying**: Executes target commands transparently, forwarding termination signals and returning the child process exit code.
+- **CI/CD validation**: Automatically falls back to validation and reports errors without hanging in non-interactive environments.
 
 ## Installation
 
+Install globally:
+
 ```bash
 npm install -g envrepair
-# or run on demand via npx
+```
+
+Or execute on demand:
+
+```bash
 npx envrepair
 ```
 
----
-
 ## Quick Start
 
-Wrap your startup command with `envrepair`:
+Prepend your start command with `envrepair`:
 
 ```bash
 envrepair next dev
-# or
-envrepair vite
 ```
 
-1. `envrepair` compares `.env.example` against `.env`.
-2. If any variables are missing, you will be prompted for values directly in the terminal (sensitive fields masked).
-3. Value updates are appended to `.env` cleanly.
-4. Your target process (e.g. `next dev` or `vite`) is spawned with transparent log forwarding.
-
----
+The execution flow runs as follows:
+1. `envrepair` compares `.env` against `.env.example`.
+2. If variables are missing or empty, the CLI prompts for values.
+3. Entered values are appended to `.env` while leaving original lines unchanged.
+4. The target process (`next dev`) is spawned with inherited standard input and output streams.
 
 ## Command Reference
 
-### Default Mode
+### Default Proxy
+
 ```bash
 envrepair [target-command]
 ```
-Checks for missing environment variables, runs the interactive repair if needed, and proxy executes the target command.
 
-### Diagnosis
+Checks environment validity, runs interactive repair if needed, and proxy executes the target command.
+
+### doctor
+
 ```bash
 envrepair doctor
 ```
-Diagnoses `.env` against `.env.example` showing a status report of synced, missing, and unused variables. Exits with code 1 if issues are found.
 
-### Repair
+Analyzes the environment files and outputs a status report of synced, missing, and unused variables. Exits with status 1 if missing variables exist.
+
+### repair
+
 ```bash
 envrepair repair
 ```
-Runs the interactive repair loop to input missing variables without launching any application process.
 
-### Diff
+Runs the interactive terminal prompt flow to repair missing variables without starting a target process.
+
+### diff
+
 ```bash
 envrepair diff [--json]
 ```
-Outputs differences between active and template environment files. Supplying `--json` prints structured JSON.
 
-### Check
+Calculates the difference between active and template environment files. Prints plain text or structured JSON.
+
+### check
+
 ```bash
 envrepair check
 ```
-A non-interactive diagnostics check that outputs JSON and exits with status 1 if variables are missing. Ideal for CI pipelines.
 
----
+Runs validation without interactive prompts, outputs differences in JSON, and exits with status 1 if variables are missing. Designed for automated scripting.
 
-## Command-line Options
+## Options
 
 - `-e, --env <path>`: Path to the active env file (defaults to `.env`).
 - `-x, --example <path>`: Path to the template example file (defaults to `.env.example`).
-- `-h, --help`: Displays usage instructions.
+- `-h, --help`: Displays help information.
 
----
+## CI/CD Integration
 
-## CI / CD Pipelines
-
-In headless or non-interactive environments, `envrepair` automatically skips prompts and reports status to prevent terminal hangs:
+In headless environments, `envrepair` automatically skips prompts and exits with status 1 if variables are missing:
 
 ```bash
-# Performs validation check and exits with status 1 if variables are missing.
+# Validates environment state and exits with 0 or 1.
 envrepair check
 ```
 
----
+## Technical Architecture and Design
 
-## Competitive Positioning
+Detailed specifications and architectural plans can be found in the project documentation:
 
-| Feature | dotenv / Node.js | dotenv-safe / envalid | envrepair |
-|---|---|---|---|
-| **Reads .env** | Yes | Yes | Yes |
-| **Detects Missing** | No | Yes | Yes |
-| **Interactive Repair** | No | No | **Yes** |
-| **Bypasses Crashes** | No | No | **Yes** (self-heals and starts) |
-| **Format Preserving** | No | No | **Yes** |
-
----
+- [Architecture Design](docs/03_architecture_design.md): Directory structure, module contracts, and data flows.
+- [Parser Specification](docs/04_parser_specification.md): Value extraction grammar, quoting styles, escaping rules, and edge cases.
+- [Competitive Landscape](docs/01_competitive_landscape.md): Gap analysis and comparisons with other dotenv validation tools.
+- [Dependency Audit](docs/02_tech_stack_validation.md): Dependency rationalization and build configuration details.
 
 ## License
 
