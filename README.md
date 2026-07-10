@@ -1,18 +1,27 @@
-# envrepair
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.jpg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/logo-light.png">
+    <img alt="envrepair logo" src="assets/logo-dark.jpg" width="150" height="150">
+  </picture>
+</p>
 
-Environment configuration manager for local development.
+<h1 align="center">envrepair</h1>
+
+<p align="center">
+  <strong>Self-healing environment configuration manager for local development.</strong>
+</p>
+
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#command-reference">Command Reference</a>
+</p>
+
+---
 
 `envrepair` validates your active `.env` file against `.env.example` before running your startup scripts. If variables are missing, the tool prompts for their values interactively in the terminal (masking credentials) and appends them to `.env` while preserving all comments, blank lines, and formatting.
-
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Command Reference](#command-reference)
-- [Options](#options)
-- [CI/CD Integration](#cicd-integration)
-- [License](#license)
 
 ## Features
 
