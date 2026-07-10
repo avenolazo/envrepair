@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2026-07-10
+
+### Added
+
+- Added comprehensive comparison table in README against dotenv-safe, sync-dotenv, and t3-env/envalid.
+- Added repository, bugs, and homepage metadata to package.json for better NPM registry integration.
+- Installed devDependency types for cross-spawn.
+
+### Fixed
+
+- Fixed typescript compilation errors (explicitly typed parameters on close handlers).
+- Cleaned up comments across the entire codebase to focus only on explaining 'Why' instead of 'What'.
+
+### Changed
+
+- Modernized all function declarations to modern ES6+ arrow function syntax.
+
+## [0.1.1] - 2026-07-10
+
+### Fixed
+
+- Replaced relative logo image paths in README with raw GitHub absolute CDN links to fix rendering on npmjs.com.
+- Fixed sensitive variables masking keywords check by expanding patterns to match short credential tokens (PASS, KEY, SECRET, PWD, CERT, PEM, etc.).
+- Bypassed git checks during release processes.
+
 ## [0.1.0] - 2026-07-10
 
 ### Added
