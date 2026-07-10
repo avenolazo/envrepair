@@ -39,8 +39,41 @@
 
 - **Format preservation**: Parses env files into structural node arrays, ensuring comments, spacing, and ordering are kept intact when new variables are appended.
 - **Interactive inputs**: Prompts for missing variables using masked inputs for sensitive key patterns (passwords, tokens, keys) and standard inputs for public options.
+- **Smart type validation**: Parses `@type` comment annotations (like `number`, `boolean`, `url`, `email`) from example files to validate user inputs in real-time.
 - **Process proxying**: Executes target commands as a transparent child process, forwarding signals and mirroring the exit code.
 - **CI/CD validation**: Automatically falls back to diagnostic checks without hanging in headless environments.
+
+## Smart Type Validation
+
+`envrepair` allows you to enforce type validation for missing variables directly in `.env.example` using `# @type <validationType>` comment annotations.
+
+### Supported Types:
+
+- **`number`** (or `int`, `integer`): Rejects any input that is not a valid number.
+- **`boolean`** (or `bool`): Accepts `true`, `false`, `yes`, `no`, `1`, or `0`.
+- **`url`** (or `uri`): Validates that the input is a valid absolute URL (e.g., `https://api.example.com`).
+- **`email`**: Checks for standard email address format (e.g., `user@domain.com`).
+- **`string`**: Default plaintext validation.
+
+### Example:
+
+In `.env.example`:
+
+```env
+# Backend port number
+# @type number
+PORT=3000
+
+# Third-party service credentials
+# @type url
+API_BASE_URL=
+
+# Admin contact address
+# @type email
+ADMIN_EMAIL=
+```
+
+When `envrepair` prompts for these variables, it automatically hides the `@type` annotation line so the description stays clean, and validates inputs in real-time, rejecting incorrect formats with clear helper instructions.
 
 ## Installation
 
