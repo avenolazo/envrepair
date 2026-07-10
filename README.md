@@ -45,17 +45,18 @@ Managing `.env` files across a team is a constant source of developer friction:
 
 ## Comparison
 
-| Feature                                     | `envrepair` | `dotenv-safe` | `sync-dotenv` | `envalid` | `t3-env` |
-| :------------------------------------------ | :---------: | :-----------: | :-----------: | :-------: | :------: |
-| **CLI wrapper (no app imports)**            |     ✅      |      ❌       |      ✅       |    ❌     |    ❌    |
-| **Requires explicit validation definition** |     ❌      |      ❌       |      ❌       |    ✅     |    ✅    |
-| **Auto-repairs missing variables**          |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Interactive terminal prompts**            |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Writes while preserving formatting**      |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Input masking for secrets**               |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Interactive typed input prompts**         |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Schema-based validation (Zod, etc.)**     |     ❌      |      ❌       |      ❌       |    ❌     |    ✅    |
-| **Transparent command execution**           |     ✅      |      ❌       |      ✅       |    ❌     |    ❌    |
+| Feature                                             | `envrepair` | `dotenv-safe` | `sync-dotenv` | `envalid` | `t3-env` |
+| :-------------------------------------------------- | :---------: | :-----------: | :-----------: | :-------: | :------: |
+| **Works as a CLI wrapper**                          |     ✅      |      ❌       |      ✅       |    ❌     |    ❌    |
+| **Requires explicit validation definition**         |     ❌      |      ❌       |      ❌       |    ✅     |    ✅    |
+| **Auto-repairs missing variables**                  |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Interactive terminal prompts**                    |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Edits existing .env while preserving formatting** |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Input masking for secrets**                       |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Interactive typed input prompts**                 |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Schema-based validation (Zod, etc.)**             |     ❌      |      ❌       |      ❌       |    ❌     |    ✅    |
+
+> `envrepair` focuses on interactive environment setup and automatic repair during local development. Tools like `t3-env` and `envalid` focus on runtime schema validation. These tools solve different problems and can be used together.
 
 ## Features
 
