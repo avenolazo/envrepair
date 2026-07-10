@@ -4,6 +4,7 @@
   "description": "Self-healing environment configuration manager for local development",
   "type": "module",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "bin": {
     "envrepair": "./dist/index.js"
   },
@@ -12,6 +13,7 @@
   ],
   "scripts": {
     "build": "tsup",
+    "prepack": "pnpm build",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint . --fix",
