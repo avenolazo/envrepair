@@ -91,4 +91,28 @@ describe("compareEnvs", () => {
       validationType: "url",
     })
   })
+
+  it("should flag various sensitive key patterns as sensitive", () => {
+    const example: EnvDocument = [
+      { type: "variable", key: "DB_PASS", value: "", raw: "DB_PASS=" },
+      { type: "variable", key: "SMTP_PWD", value: "", raw: "SMTP_PWD=" },
+      { type: "variable", key: "STRIPE_KEY", value: "", raw: "STRIPE_KEY=" },
+      { type: "variable", key: "WEBHOOK_SIGNATURE", value: "", raw: "WEBHOOK_SIGNATURE=" },
+      { type: "variable", key: "CLIENT_CERT", value: "", raw: "CLIENT_CERT=" },
+      { type: "variable", key: "SSL_PEM", value: "", raw: "SSL_PEM=" },
+      { type: "variable", key: "BCRYPT_SALT", value: "", raw: "BCRYPT_SALT=" },
+      { type: "variable", key: "PUBLIC_CONFIG", value: "", raw: "PUBLIC_CONFIG=" },
+    ]
+
+    const result = compareEnvs(example, [])
+
+    expect(result.missing.find((v) => v.key === "DB_PASS")?.isSensitive).toBe(true)
+    expect(result.missing.find((v) => v.key === "SMTP_PWD")?.isSensitive).toBe(true)
+    expect(result.missing.find((v) => v.key === "STRIPE_KEY")?.isSensitive).toBe(true)
+    expect(result.missing.find((v) => v.key === "WEBHOOK_SIGNATURE")?.isSensitive).toBe(true)
+    expect(result.missing.find((v) => v.key === "CLIENT_CERT")?.isSensitive).toBe(true)
+    expect(result.missing.find((v) => v.key === "SSL_PEM")?.isSensitive).toBe(true)
+    expect(result.missing.find((v) => v.key === "BCRYPT_SALT")?.isSensitive).toBe(true)
+    expect(result.missing.find((v) => v.key === "PUBLIC_CONFIG")?.isSensitive).toBe(false)
+  })
 })

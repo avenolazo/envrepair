@@ -4,15 +4,18 @@ import { extractVariables } from "./parser.js"
 // Keywords commonly associated with credentials or sensitive values.
 // Used to determine if shell inputs should mask user typings.
 const SENSITIVE_PATTERNS = [
-  "SECRET",
-  "TOKEN",
-  "PASSWORD",
-  "API_KEY",
-  "PRIVATE_KEY",
-  "AUTH",
-  "JWT",
-  "CREDENTIAL",
-  "PASSPHRASE",
+  "PASS", // Matches PASSWORD, PASSPHRASE, DB_PASS, SMTP_PASS
+  "SECRET", // Matches CLIENT_SECRET, APP_SECRET
+  "TOKEN", // Matches API_TOKEN, ACCESS_TOKEN, JWT
+  "KEY", // Matches API_KEY, PRIVATE_KEY, STRIPE_KEY, KEY
+  "PWD", // Matches DB_PWD, PWD
+  "AUTH", // Matches AUTH, AUTHORIZATION
+  "CREDENTIAL", // Matches CREDENTIALS
+  "SALT", // Matches BCRYPT_SALT
+  "HASH", // Matches PASSWORD_HASH
+  "CERT", // Matches CLIENT_CERT, CERTIFICATE
+  "PEM", // Matches SSL_PEM
+  "SIGNATURE", // Matches WEBHOOK_SIGNATURE
 ] as const
 
 /**
