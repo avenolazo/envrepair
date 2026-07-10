@@ -25,13 +25,13 @@
   <a href="#installation">Installation</a> •
   <a href="#quick-start">Quick Start</a> •
   <a href="#features">Features</a> •
-  <a href="#comparison">Comparison</a> •
+  <a href="#faq">FAQ</a> •
   <a href="#command-reference">Command Reference</a>
 </p>
 
 ---
 
-Stop crashing your development server because a teammate added a new environment variable. `envrepair` compares your active `.env` against `.env.example`, repairs missing variables interactively, then launches your command — preserving comments, spacing, blank lines, and ordering in your `.env` file.
+Stop crashing your development server because your `.env` is out of sync with `.env.example`. `envrepair` compares your active `.env` against the template, repairs missing variables interactively, then launches your command — preserving comments, spacing, blank lines, and ordering.
 
 ## Installation
 
@@ -111,16 +111,6 @@ $ envrepair next dev
 - Behaves like your original command. `Ctrl+C`, exit codes, and terminal output work exactly as expected.
 - Automatically detects CI environments and exits with status 1 instead of hanging on interactive prompts.
 
-## Why `envrepair`?
-
-Managing `.env` files across a team is a consistent source of friction:
-
-- If a teammate adds a new key to `.env.example`, pulling their changes will crash your local application because your `.env` is out of sync.
-- Validators like `dotenv-safe` crash your app on startup without helping you fix the issue.
-- Basic sync scripts copy keys with empty values, destroying your comments, custom spacing, and file organization.
-
-`envrepair` runs at the process level, requiring zero code changes. It detects missing variables, prompts you to repair them interactively with real-time validation, and preserves 100% of your `.env` layout before spawning your target command.
-
 ## How It Works
 
 ```
@@ -151,36 +141,46 @@ nest start    remix dev         python manage.py runserver
 
 ## Smart Type Validation
 
-Add `# @type <type>` annotations to `.env.example` to validate inputs during prompts. Supported types: `string`, `number`, `boolean`, `url`, `email`.
+Add `# @type <type>` annotations to `.env.example` to validate inputs during prompts:
 
 ```env
-# Backend port number
-# @type number
-PORT=3000
-
-# Third-party service credentials
 # @type url
 API_BASE_URL=
-
-# Admin contact address
-# @type email
-ADMIN_EMAIL=
 ```
 
-Invalid inputs are rejected immediately with a format hint before the prompt repeats.
+```
+API_BASE_URL:
+  Enter value: localhost
+  ❌ Invalid url
+
+  Enter value: https://api.example.com
+  ✓
+```
+
+Supported validation types: `string`, `number`, `boolean`, `url`, `email`.
+
+## FAQ
+
+**Does `envrepair` overwrite existing values?**
+
+No. Only variables that are missing from your `.env` are appended. Existing values are never modified.
+
+**Is this intended for production?**
+
+No. `envrepair` is designed for local development. In CI environments it skips prompts entirely and exits with status 1 if variables are missing, so it integrates cleanly into pipelines without hanging.
 
 ## Comparison
 
-| Feature                                             | `envrepair` | `dotenv-safe` | `sync-dotenv` | `envalid` | `t3-env` |
-| :-------------------------------------------------- | :---------: | :-----------: | :-----------: | :-------: | :------: |
-| **Works as a CLI wrapper**                          |     ✅      |      ❌       |      ✅       |    ❌     |    ❌    |
-| **Requires explicit validation definition**         |     ❌      |      ❌       |      ❌       |    ✅     |    ✅    |
-| **Auto-repairs missing variables**                  |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Interactive terminal prompts**                    |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Edits existing .env while preserving formatting** |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Input masking for secrets**                       |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Interactive typed input prompts**                 |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Schema-based validation (Zod, etc.)**             |     ❌      |      ❌       |      ❌       |    ❌     |    ✅    |
+| Feature                                                    | `envrepair` | `dotenv-safe` | `sync-dotenv` | `envalid` | `t3-env` |
+| :--------------------------------------------------------- | :---------: | :-----------: | :-----------: | :-------: | :------: |
+| **Works as a CLI wrapper**                                 |     ✅      |      ❌       |      ✅       |    ❌     |    ❌    |
+| **Requires explicit validation definition**                |     ❌      |      ❌       |      ❌       |    ✅     |    ✅    |
+| **Auto-repairs missing variables**                         |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Interactive terminal prompts**                           |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Preserves comments, spacing, blank lines, and ordering** |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Input masking for secrets**                              |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Interactive typed input prompts**                        |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Schema-based validation (Zod, etc.)**                    |     ❌      |      ❌       |      ❌       |    ❌     |    ✅    |
 
 > `envrepair` focuses on interactive environment setup and automatic repair before your application starts. Tools like `t3-env` and `envalid` focus on validating environment variables inside your application at runtime. These tools solve different problems and can be used together.
 
@@ -197,16 +197,6 @@ These are runtime schema validators that live inside your application code. They
 ### sync-dotenv
 
 `sync-dotenv` automatically copies missing keys from `.env.example` into `.env` with empty values. It does not prompt you to fill them in, and it destroys your existing comments, spacing, and ordering in the process.
-
-## FAQ
-
-**Does `envrepair` overwrite existing values?**
-
-No. Only variables that are missing from your `.env` are appended. Existing values are never modified.
-
-**Is this intended for production?**
-
-No. `envrepair` is designed for local development. In CI environments it skips prompts entirely and exits with status 1 if variables are missing, so it integrates cleanly into pipelines without hanging.
 
 ## Command Reference
 
