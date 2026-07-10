@@ -1,6 +1,6 @@
 {
   "name": "envrepair",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Self-healing environment configuration manager for local development",
   "type": "module",
   "main": "./dist/index.js",
