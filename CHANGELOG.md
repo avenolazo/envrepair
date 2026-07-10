@@ -9,40 +9,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added interactive terminal demo GIF to the top of the README.
+- Added interactive console demo GIF to the README header.
 - Added a full console quick demo video (`walkthrough.mp4`) directly in the README.
-
-### Changed
-
-- Expanded README installation guide to support local project dependency options (npm, pnpm, yarn).
-- Documented the recommended workflow for devDependencies and package.json dev scripts.
-- Restructured and polished the README layout, including logo alignment, brand name casing, GitHub alert boxes, and section reordering.
-- Removed all em-dashes and refined language grammar throughout the documentation.
+- Added support and guides for installing `envrepair` locally as a devDependency using npm, pnpm, or yarn.
 
 ## [0.1.2] - 2026-07-10
 
 ### Added
 
-- Added comprehensive comparison table in README against dotenv-safe, sync-dotenv, and t3-env/envalid.
-- Added repository, bugs, and homepage metadata to package.json for better NPM registry integration.
-- Installed devDependency types for cross-spawn.
+- Added a comprehensive feature comparison table in the README evaluating `envrepair` against `dotenv-safe`, `sync-dotenv`, and `t3-env`/`envalid`.
+- Expanded sensitive variable pattern matching to automatically mask short credential keys (e.g. `PASS`, `KEY`, `SECRET`, `PWD`, `CERT`, `PEM`).
 
 ### Fixed
 
-- Fixed typescript compilation errors (explicitly typed parameters on close handlers).
-- Cleaned up comments across the entire codebase to focus only on explaining 'Why' instead of 'What'.
-
-### Changed
-
-- Modernized all function declarations to modern ES6+ arrow function syntax.
+- Resolved TypeScript compilation errors caused by implicit `any` types in process close handlers.
 
 ## [0.1.1] - 2026-07-10
 
+### Added
+
+- Added smart input validation using `# @type` comment annotations in `.env.example` templates (supporting `number`, `boolean`, `url`, and `email`).
+- Added smart default environment file discovery that prioritizes `.env.local` if it exists.
+
 ### Fixed
 
-- Replaced relative logo image paths in README with raw GitHub absolute CDN links to fix rendering on npmjs.com.
-- Fixed sensitive variables masking keywords check by expanding patterns to match short credential tokens (PASS, KEY, SECRET, PWD, CERT, PEM, etc.).
-- Bypassed git checks during release processes.
+- Fixed sensitive password prompts by removing unsafe default string leakages.
+- Resolved logo rendering issues on npmjs.com by switching to absolute CDN URLs in the README.
+- Fixed TypeScript compile-time imports by adopting type-only imports to satisfy `verbatimModuleSyntax`.
 
 ## [0.1.0] - 2026-07-10
 
@@ -50,9 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release of `envrepair`.
 - Format-preserving `.env` parser that retains inline comments, blank lines, and ordering.
-- Pure diffing engine for comparing active environment files against templates.
 - Interactive terminal repair loop using `@inquirer/prompts` with automatic masked inputs for credentials.
-- CI/CD environment auto-detection to prevent prompts from hanging in headless scripts.
-- Signal-forwarding and exit-code-mirroring process proxy launcher.
-- Commands: `doctor`, `repair`, `diff`, `check`, and default process proxy execution mode.
-- Path customization support via `--env` and `--example` flags.
+- CI/CD environment auto-detection to prevent CLI prompts from hanging in headless scripts.
+- Transparent process proxy launcher that forwards signals (e.g., `Ctrl+C`) and mirrors exit codes.
