@@ -35,6 +35,8 @@ Stop crashing your development server because your `.env` is out of sync with `.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/avenolazo/envrepair/main/assets/demo.gif" alt="envrepair demo" width="600">
+  <br />
+  <a href="assets/demo.mp4">Watch the full walkthrough video with play/pause controls</a>
 </p>
 
 ## Installation
@@ -106,12 +108,6 @@ $ envrepair next dev
 
 > next dev
 ```
-
-## Video Walkthrough
-
-<p align="center">
-  <video src="assets/demo.mp4" controls width="100%"></video>
-</p>
 
 ## Features
 
