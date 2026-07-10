@@ -1,4 +1,4 @@
-import { EnvDocument, DiffResult, MissingVariable } from "./types.js"
+import type { EnvDocument, DiffResult, MissingVariable } from "./types.js"
 import { extractVariables } from "./parser.js"
 
 // Keywords commonly associated with credentials or sensitive values.

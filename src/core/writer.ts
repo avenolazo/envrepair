@@ -1,6 +1,6 @@
 import fs from "node:fs/promises"
 import path from "node:path"
-import { WriterOptions } from "./types.js"
+import type { WriterOptions } from "./types.js"
 
 /**
  * Safely formats an environment variable value for writing to a .env file.

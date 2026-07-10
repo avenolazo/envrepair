@@ -1,5 +1,5 @@
 import { input, password } from "@inquirer/prompts"
-import { MissingVariable } from "../core/types.js"
+import type { MissingVariable } from "../core/types.js"
 import { isCI } from "../utils/ci.js"
 
 /**

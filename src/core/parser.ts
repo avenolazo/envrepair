@@ -1,5 +1,5 @@
 import fs from "node:fs/promises"
-import { EnvDocument } from "./types.js"
+import type { EnvDocument } from "./types.js"
 
 // Matches standard environment variable declarations, supporting optional 'export' prefixes.
 // Supports leading whitespace before the key or export prefix.

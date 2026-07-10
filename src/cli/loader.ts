@@ -1,4 +1,4 @@
-import { EnvDocument } from "../core/types.js"
+import type { EnvDocument } from "../core/types.js"
 import { parseEnv } from "../core/parser.js"
 import { fileExists } from "../utils/env-files.js"
 import { log } from "../utils/logger.js"
