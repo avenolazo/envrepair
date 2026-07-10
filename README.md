@@ -44,6 +44,7 @@ envrepair next dev
 ```
 
 The tool will:
+
 1. Compare `.env` against `.env.example`.
 2. Prompt for inputs in the terminal if variables are missing or empty.
 3. Append updates to `.env` while keeping existing formatting.

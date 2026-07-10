@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-07-10
 
 ### Added
+
 - Initial release of `envrepair`.
 - Format-preserving `.env` parser that retains inline comments, blank lines, and ordering.
 - Pure diffing engine for comparing active environment files against templates.

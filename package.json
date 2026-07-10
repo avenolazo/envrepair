@@ -13,7 +13,10 @@
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "lint": "eslint . --fix",
+    "format": "prettier --write .",
+    "fix": "pnpm run lint && pnpm run format"
   },
   "keywords": [
     "env",
@@ -42,9 +45,13 @@
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.20.0",
     "@types/node": "^26.1.1",
+    "eslint": "^9.20.0",
+    "prettier": "^3.5.0",
     "tsup": "^8.5.1",
-    "typescript": "^7.0.2",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.24.0",
     "vitest": "^4.1.10"
   }
 }
