@@ -25,6 +25,7 @@
 </p>
 
 <p align="center">
+  <a href="#why">Why?</a> •
   <a href="#features">Features</a> •
   <a href="#installation">Installation</a> •
   <a href="#quick-start">Quick Start</a> •
@@ -34,6 +35,16 @@
 ---
 
 `envrepair` validates your active `.env` file against `.env.example` before running your startup scripts. If variables are missing, the tool prompts for their values interactively in the terminal (masking credentials) and appends them to `.env` while preserving all comments, blank lines, and formatting.
+
+## Why `envrepair`? (Motivation)
+
+Managing `.env` files across a team is a constant source of developer friction:
+
+- **The Sync Crash**: A teammate adds a new configuration key to `.env.example`. You pull the latest code, run your app, and it crashes silently or throws runtime errors because your local `.env` is out of sync.
+- **Tooling Footprint**: Existing validators (like `dotenv-safe`) force you to add dependencies to your codebase, write language-specific check scripts, and modify your application bootstrap code.
+- **Destructive Syncing**: Simple CLI file syncers just copy keys with empty values, completely wiping out your carefully structured comments, custom spacing, and file organization.
+
+`envrepair` acts as a **non-intrusive terminal bouncer**. It runs at the process level (requiring zero code changes), interactively guides you to repair missing variables with real-time validation, and preserves 100% of your `.env` layout.
 
 ## Features
 
