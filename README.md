@@ -95,32 +95,55 @@ When `envrepair` prompts for these variables, it automatically hides the `@type`
 
 ## Installation
 
-Install globally:
+### Local Installation (Recommended for teams)
+
+Install `envrepair` as a development dependency inside your repository. This ensures all team members have access to the tool automatically upon installing packages:
 
 ```bash
-npm install -g envrepair
+# npm
+npm install -D envrepair
+
+# pnpm
+pnpm add -D envrepair
+
+# yarn
+yarn add -D envrepair
 ```
 
-Or run on demand:
+Then, prepend your startup scripts in `package.json`:
+
+```json
+"scripts": {
+  "dev": "envrepair next dev"
+}
+```
+
+### Global Installation & On-Demand
+
+Alternatively, install globally to run the CLI anywhere on your machine, or run it instantly without a local installation:
 
 ```bash
-npx envrepair
+# Install globally
+npm install -g envrepair
+
+# Or run instantly on demand
+npx envrepair [command]
 ```
 
 ## Quick Start
 
-Prepend your start command with `envrepair`:
+Simply prepend your normal development command with `envrepair` (globally or within your `package.json` scripts):
 
 ```bash
 envrepair next dev
 ```
 
-The tool will:
+Whenever this command is run, `envrepair` will:
 
-1. Compare `.env` against `.env.example`.
-2. Prompt for inputs in the terminal if variables are missing or empty.
-3. Append updates to `.env` while keeping existing formatting.
-4. Spawn the target command (`next dev`) with inherited standard input and output streams.
+1. **Scan**: Compares your local `.env` (or `.env.local`) against `.env.example`.
+2. **Prompt & Validate**: Interactively prompts you in the terminal for any missing keys, validating formats (like numbers, URLs, and emails) and masking sensitive credentials.
+3. **Save**: Appends the new variables to your `.env` file safely, preserving all of your existing comments, layout groupings, and empty lines.
+4. **Spawn**: Instantly starts your target command (`next dev`) as a transparent child process, passing signals (like `Ctrl+C`) and exit codes down to the shell.
 
 ## Command Reference
 
