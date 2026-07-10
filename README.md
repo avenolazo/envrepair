@@ -12,9 +12,6 @@
   <a href="https://www.npmjs.com/package/envrepair">
     <img src="https://img.shields.io/npm/v/envrepair.svg?style=flat-square" alt="npm version">
   </a>
-  <a href="https://www.npmjs.com/package/envrepair">
-    <img src="https://img.shields.io/npm/dm/envrepair.svg?style=flat-square" alt="npm downloads">
-  </a>
   <a href="https://github.com/avenolazo/envrepair/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/avenolazo/envrepair.svg?style=flat-square" alt="license">
   </a>
@@ -36,7 +33,7 @@
 
 `envrepair` validates your active `.env` file against `.env.example` before running your startup scripts. If variables are missing, the tool prompts for their values interactively in the terminal (masking credentials) and appends them to `.env` while preserving all comments, blank lines, and formatting.
 
-## Why `envrepair`? (Motivation)
+## Why `envrepair`?
 
 Managing `.env` files across a team is a constant source of developer friction:
 
