@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <strong>Self-healing environment configuration manager for local development.</strong>
+  <strong>A CLI wrapper that detects and repairs missing .env variables before your app starts.</strong>
 </p>
 
 <p align="center">
@@ -35,13 +35,13 @@
 
 ## Why `envrepair`?
 
-Managing `.env` files across a team is a constant source of developer friction:
+Managing `.env` files across a team is a consistent source of friction:
 
-- If a teammate adds a new key to `.env.example`, pulling their changes will crash your local application because your `.env` file is out of sync.
-- Traditional validators like `dotenv-safe` force you to add runtime dependencies to your code and write boilerplate bootstrap checks.
-- Basic sync scripts simply copy keys with empty values, destroying your comments, custom spacing, and file organization.
+- If a teammate adds a new key to `.env.example`, pulling their changes will crash your local application because your `.env` is out of sync.
+- Validators like `dotenv-safe` crash your app on startup without helping you fix the issue.
+- Basic sync scripts copy keys with empty values, destroying your comments, custom spacing, and file organization.
 
-`envrepair` acts as a **non-intrusive terminal bouncer**. It runs at the process level (requiring zero code changes), interactively guides you to repair missing variables with real-time validation, and preserves 100% of your `.env` layout.
+`envrepair` runs at the process level, requiring zero code changes. It detects missing variables, prompts you to repair them interactively with real-time validation, and preserves 100% of your `.env` layout before spawning your target command.
 
 ## Comparison
 
@@ -60,17 +60,17 @@ Managing `.env` files across a team is a constant source of developer friction:
 
 ## Features
 
-- Parses `.env` files into structural nodes to keep comments, blank lines, and ordering intact when appending new keys.
+- Appends new variables to `.env` without touching existing comments, blank lines, or formatting.
 - Interactively prompts for missing variables with automatic input masking for sensitive credentials (like passwords, keys, and tokens).
-- Reads `# @type <type>` comments from `.env.example` to validate formats (number, boolean, url, email) in real-time.
+- Reads `# @type <type>` annotations from `.env.example` to validate formats (number, boolean, url, email) in real-time.
 - Runs target processes transparently, forwarding exit codes and POSIX signals.
-- Automatically detects headless environments and runs diagnostic checks instead of hanging.
+- Automatically detects CI environments and exits with status 1 instead of hanging on interactive prompts.
 
 ## Smart Type Validation
 
 `envrepair` allows you to enforce type validation for missing variables directly in `.env.example` using `# @type <validationType>` comment annotations.
 
-### Supported Types:
+### Supported Types
 
 - **`number`** (or `int`, `integer`): Rejects any input that is not a valid number.
 - **`boolean`** (or `bool`): Accepts `true`, `false`, `yes`, `no`, `1`, or `0`.
@@ -96,13 +96,13 @@ API_BASE_URL=
 ADMIN_EMAIL=
 ```
 
-When `envrepair` prompts for these variables, it automatically hides the `@type` annotation line so the description stays clean, and validates inputs in real-time, rejecting incorrect formats with clear helper instructions.
+When `envrepair` prompts for these variables, it hides the `@type` annotation line from the prompt so the description stays clean. Invalid inputs are rejected immediately with a format hint before the prompt repeats.
 
 ## Installation
 
 ### Local Installation (Recommended for teams)
 
-Install `envrepair` as a development dependency inside your repository. This ensures all team members have access to the tool automatically upon installing packages:
+Install `envrepair` as a development dependency so it is available to all team members after `npm install`:
 
 ```bash
 # npm
@@ -125,7 +125,7 @@ Then, prepend your startup scripts in `package.json`:
 
 ### Global Installation & On-Demand
 
-Alternatively, install globally to run the CLI anywhere on your machine, or run it instantly without a local installation:
+Install globally or run on-demand without a local installation:
 
 ```bash
 # Install globally
@@ -158,7 +158,7 @@ Whenever this command is run, `envrepair` will:
 envrepair [target-command]
 ```
 
-Checks environment validity, runs interactive repair if needed, and proxy executes the target command.
+Checks environment validity, runs interactive repair if needed, then runs the target command.
 
 ### doctor
 
@@ -182,7 +182,7 @@ Runs the interactive terminal prompt flow to repair missing variables without st
 envrepair diff [--json]
 ```
 
-Calculates differences between active and template environment files. Prints plain text or structured JSON.
+Shows differences between the active and template environment files. Outputs plain text or structured JSON.
 
 ### check
 
