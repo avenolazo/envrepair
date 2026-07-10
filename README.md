@@ -9,6 +9,18 @@
 <h1 align="center">envrepair</h1>
 
 <p align="center">
+  <a href="https://www.npmjs.com/package/envrepair">
+    <img src="https://img.shields.io/npm/v/envrepair.svg?style=flat-square" alt="npm version">
+  </a>
+  <a href="https://www.npmjs.com/package/envrepair">
+    <img src="https://img.shields.io/npm/dm/envrepair.svg?style=flat-square" alt="npm downloads">
+  </a>
+  <a href="https://github.com/avenolazo/envrepair/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/avenolazo/envrepair.svg?style=flat-square" alt="license">
+  </a>
+</p>
+
+<p align="center">
   <strong>Self-healing environment configuration manager for local development.</strong>
 </p>
 
