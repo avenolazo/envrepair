@@ -40,19 +40,19 @@
 
 Managing `.env` files across a team is a constant source of developer friction:
 
-- **The Sync Crash**: A teammate adds a new configuration key to `.env.example`. You pull the latest code, run your app, and it crashes silently or throws runtime errors because your local `.env` is out of sync.
-- **Tooling Footprint**: Existing validators (like `dotenv-safe`) force you to add dependencies to your codebase, write language-specific check scripts, and modify your application bootstrap code.
-- **Destructive Syncing**: Simple CLI file syncers just copy keys with empty values, completely wiping out your carefully structured comments, custom spacing, and file organization.
+- If a teammate adds a new key to `.env.example`, pulling their changes will crash your local application because your `.env` file is out of sync.
+- Traditional validators like `dotenv-safe` force you to add runtime dependencies to your code and write boilerplate bootstrap checks.
+- Basic sync scripts simply copy keys with empty values, destroying your comments, custom spacing, and file organization.
 
 `envrepair` acts as a **non-intrusive terminal bouncer**. It runs at the process level (requiring zero code changes), interactively guides you to repair missing variables with real-time validation, and preserves 100% of your `.env` layout.
 
 ## Features
 
-- **Format preservation**: Parses env files into structural node arrays, ensuring comments, spacing, and ordering are kept intact when new variables are appended.
-- **Interactive inputs**: Prompts for missing variables using masked inputs for sensitive key patterns (passwords, tokens, keys) and standard inputs for public options.
-- **Smart type validation**: Parses `@type` comment annotations (like `number`, `boolean`, `url`, `email`) from example files to validate user inputs in real-time.
-- **Process proxying**: Executes target commands as a transparent child process, forwarding signals and mirroring the exit code.
-- **CI/CD validation**: Automatically falls back to diagnostic checks without hanging in headless environments.
+- Parses `.env` files into structural nodes to keep comments, blank lines, and ordering intact when appending new keys.
+- Interactively prompts for missing variables with automatic input masking for sensitive credentials (like passwords, keys, and tokens).
+- Reads `# @type <type>` comments from `.env.example` to validate formats (number, boolean, url, email) in real-time.
+- Runs target processes transparently, forwarding exit codes and POSIX signals.
+- Automatically detects headless environments and runs diagnostic checks instead of hanging.
 
 ## Smart Type Validation
 
