@@ -18,85 +18,20 @@
 </p>
 
 <p align="center">
-  <strong>A CLI wrapper that detects and repairs missing .env variables before your app starts.</strong>
+  <strong>A CLI wrapper that detects and repairs missing environment variables before your app starts.</strong>
 </p>
 
 <p align="center">
-  <a href="#why">Why?</a> •
-  <a href="#features">Features</a> •
   <a href="#installation">Installation</a> •
   <a href="#quick-start">Quick Start</a> •
+  <a href="#why-envrepair">Why?</a> •
+  <a href="#features">Features</a> •
   <a href="#command-reference">Command Reference</a>
 </p>
 
 ---
 
 `envrepair` validates your active `.env` file against `.env.example` before running your startup scripts. If variables are missing, the tool prompts for their values interactively in the terminal (masking credentials) and appends them to `.env` while preserving all comments, blank lines, and formatting.
-
-## Why `envrepair`?
-
-Managing `.env` files across a team is a consistent source of friction:
-
-- If a teammate adds a new key to `.env.example`, pulling their changes will crash your local application because your `.env` is out of sync.
-- Validators like `dotenv-safe` crash your app on startup without helping you fix the issue.
-- Basic sync scripts copy keys with empty values, destroying your comments, custom spacing, and file organization.
-
-`envrepair` runs at the process level, requiring zero code changes. It detects missing variables, prompts you to repair them interactively with real-time validation, and preserves 100% of your `.env` layout before spawning your target command.
-
-## Comparison
-
-| Feature                                             | `envrepair` | `dotenv-safe` | `sync-dotenv` | `envalid` | `t3-env` |
-| :-------------------------------------------------- | :---------: | :-----------: | :-----------: | :-------: | :------: |
-| **Works as a CLI wrapper**                          |     ✅      |      ❌       |      ✅       |    ❌     |    ❌    |
-| **Requires explicit validation definition**         |     ❌      |      ❌       |      ❌       |    ✅     |    ✅    |
-| **Auto-repairs missing variables**                  |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Interactive terminal prompts**                    |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Edits existing .env while preserving formatting** |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Input masking for secrets**                       |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Interactive typed input prompts**                 |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Schema-based validation (Zod, etc.)**             |     ❌      |      ❌       |      ❌       |    ❌     |    ✅    |
-
-> `envrepair` focuses on interactive environment setup and automatic repair before your application starts. Tools like `t3-env` and `envalid` focus on validating environment variables inside your application at runtime. These tools solve different problems and can be used together.
-
-## Features
-
-- Appends new variables to `.env` without touching existing comments, blank lines, or formatting.
-- Interactively prompts for missing variables with automatic input masking for sensitive credentials (like passwords, keys, and tokens).
-- Reads `# @type <type>` annotations from `.env.example` to validate formats (number, boolean, url, email) in real-time.
-- Runs target processes transparently, forwarding exit codes and POSIX signals.
-- Automatically detects CI environments and exits with status 1 instead of hanging on interactive prompts.
-
-## Smart Type Validation
-
-`envrepair` allows you to enforce type validation for missing variables directly in `.env.example` using `# @type <validationType>` comment annotations.
-
-### Supported Types
-
-- **`number`** (or `int`, `integer`): Rejects any input that is not a valid number.
-- **`boolean`** (or `bool`): Accepts `true`, `false`, `yes`, `no`, `1`, or `0`.
-- **`url`** (or `uri`): Validates that the input is a valid absolute URL (e.g., `https://api.example.com`).
-- **`email`**: Checks for standard email address format (e.g., `user@domain.com`).
-- **`string`**: Default plaintext validation.
-
-### Example:
-
-In `.env.example`:
-
-```env
-# Backend port number
-# @type number
-PORT=3000
-
-# Third-party service credentials
-# @type url
-API_BASE_URL=
-
-# Admin contact address
-# @type email
-ADMIN_EMAIL=
-```
-
-When `envrepair` prompts for these variables, it hides the `@type` annotation line from the prompt so the description stays clean. Invalid inputs are rejected immediately with a format hint before the prompt repeats.
 
 ## Installation
 
@@ -137,7 +72,7 @@ npx envrepair [command]
 
 ## Quick Start
 
-Simply prepend your normal development command with `envrepair` (globally or within your `package.json` scripts):
+Simply prepend your normal development command with `envrepair`:
 
 ```bash
 envrepair next dev
@@ -149,6 +84,110 @@ Whenever this command is run, `envrepair` will:
 2. **Prompt & Validate**: Interactively prompts you in the terminal for any missing keys, validating formats (like numbers, URLs, and emails) and masking sensitive credentials.
 3. **Save**: Appends the new variables to your `.env` file safely, preserving all of your existing comments, layout groupings, and empty lines.
 4. **Spawn**: Instantly starts your target command (`next dev`) as a transparent child process, passing signals (like `Ctrl+C`) and exit codes down to the shell.
+
+## Why `envrepair`?
+
+Managing `.env` files across a team is a consistent source of friction:
+
+- If a teammate adds a new key to `.env.example`, pulling their changes will crash your local application because your `.env` is out of sync.
+- Validators like `dotenv-safe` crash your app on startup without helping you fix the issue.
+- Basic sync scripts copy keys with empty values, destroying your comments, custom spacing, and file organization.
+
+`envrepair` runs at the process level, requiring zero code changes. It detects missing variables, prompts you to repair them interactively with real-time validation, and preserves 100% of your `.env` layout before spawning your target command.
+
+## Comparison
+
+| Feature                                             | `envrepair` | `dotenv-safe` | `sync-dotenv` | `envalid` | `t3-env` |
+| :-------------------------------------------------- | :---------: | :-----------: | :-----------: | :-------: | :------: |
+| **Works as a CLI wrapper**                          |     ✅      |      ❌       |      ✅       |    ❌     |    ❌    |
+| **Requires explicit validation definition**         |     ❌      |      ❌       |      ❌       |    ✅     |    ✅    |
+| **Auto-repairs missing variables**                  |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Interactive terminal prompts**                    |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Edits existing .env while preserving formatting** |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Input masking for secrets**                       |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Interactive typed input prompts**                 |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Schema-based validation (Zod, etc.)**             |     ❌      |      ❌       |      ❌       |    ❌     |    ✅    |
+
+> `envrepair` focuses on interactive environment setup and automatic repair before your application starts. Tools like `t3-env` and `envalid` focus on validating environment variables inside your application at runtime. These tools solve different problems and can be used together.
+
+## Why Not Just Use...?
+
+### dotenv-safe
+
+`dotenv-safe` intentionally fails fast — it crashes your app if variables are missing and leaves you to find and fix them manually. `envrepair` guides you through repairing them interactively before your app ever starts.
+
+### t3-env / envalid
+
+These are runtime schema validators that live inside your application code. They are excellent at validating the types and shapes of variables your app depends on. `envrepair` works at the terminal layer before your app boots. They solve different problems and can be used together.
+
+### sync-dotenv
+
+`sync-dotenv` automatically copies missing keys from `.env.example` into `.env` with empty values. It does not prompt you to fill them in, and it destroys your existing comments, spacing, and layout in the process.
+
+## Features
+
+- **Never destroys your carefully organized `.env` file.** Appends new keys without touching existing comments, blank lines, or ordering.
+- **Rejects invalid formats before they reach your application.** Validates URLs, emails, numbers, and booleans in real-time using `# @type` annotations in your template.
+- **Masks credentials automatically.** Any key matching common sensitive patterns (PASSWORD, SECRET, TOKEN, KEY, etc.) is prompted with hidden input.
+- Runs target processes transparently, forwarding exit codes and POSIX signals.
+- Automatically detects CI environments and exits with status 1 instead of hanging on interactive prompts.
+
+## How It Works
+
+```
+envrepair next dev
+        │
+        ▼
+ Read .env.example
+        │
+        ▼
+  Compare to .env
+        │
+   Missing keys?
+  ┌─────┴─────┐
+ Yes          No
+  │            │
+  ▼            ▼
+Prompt      Launch next dev
+  │
+  ▼
+Write to .env
+  │
+  ▼
+Launch next dev
+```
+
+## Smart Type Validation
+
+`envrepair` allows you to enforce type validation for missing variables directly in `.env.example` using `# @type <validationType>` comment annotations.
+
+### Supported Types
+
+- **`number`** (or `int`, `integer`): Rejects any input that is not a valid number.
+- **`boolean`** (or `bool`): Accepts `true`, `false`, `yes`, `no`, `1`, or `0`.
+- **`url`** (or `uri`): Validates that the input is a valid absolute URL (e.g., `https://api.example.com`).
+- **`email`**: Checks for standard email address format (e.g., `user@domain.com`).
+- **`string`**: Default plaintext validation.
+
+### Example
+
+In `.env.example`:
+
+```env
+# Backend port number
+# @type number
+PORT=3000
+
+# Third-party service credentials
+# @type url
+API_BASE_URL=
+
+# Admin contact address
+# @type email
+ADMIN_EMAIL=
+```
+
+When `envrepair` prompts for these variables, it hides the `@type` annotation line from the prompt so the description stays clean. Invalid inputs are rejected immediately with a format hint before the prompt repeats.
 
 ## Command Reference
 
