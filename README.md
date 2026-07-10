@@ -46,6 +46,16 @@ Managing `.env` files across a team is a constant source of developer friction:
 
 `envrepair` acts as a **non-intrusive terminal bouncer**. It runs at the process level (requiring zero code changes), interactively guides you to repair missing variables with real-time validation, and preserves 100% of your `.env` layout.
 
+## Comparison
+
+| Feature                           |       `envrepair`       |      `dotenv-safe`       |     `sync-dotenv`      |
+| :-------------------------------- | :---------------------: | :----------------------: | :--------------------: |
+| **No Code Changes Required**      |    ✅ (CLI Wrapper)     | ❌ (Import boilerplate)  |    ✅ (CLI Runner)     |
+| **Interactive Terminal Prompts**  |   ✅ (Input prompts)    |    ❌ (Crash on boot)    | ❌ (Adds empty fields) |
+| **Comment & Layout Preservation** |  ✅ (Preserves format)  | ➖ (Doesn't write files) | ❌ (Destroys layouts)  |
+| **Input Masking for Secrets**     |    ✅ (Auto-masking)    |            ❌            |           ❌           |
+| **Smart Type Validation**         | ✅ (URL, Email, Number) |            ❌            |           ❌           |
+
 ## Features
 
 - Parses `.env` files into structural nodes to keep comments, blank lines, and ordering intact when appending new keys.
