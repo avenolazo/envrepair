@@ -45,13 +45,16 @@ Managing `.env` files across a team is a constant source of developer friction:
 
 ## Comparison
 
-| Feature                           |       `envrepair`       |      `dotenv-safe`       |     `sync-dotenv`      |     `t3-env` / `envalid`     |
-| :-------------------------------- | :---------------------: | :----------------------: | :--------------------: | :--------------------------: |
-| **No Code Changes Required**      |    ✅ (CLI Wrapper)     | ❌ (Import boilerplate)  |    ✅ (CLI Runner)     |  ❌ (Requires code schema)   |
-| **Interactive Terminal Prompts**  |   ✅ (Input prompts)    |    ❌ (Crash on boot)    | ❌ (Adds empty fields) |      ❌ (Crash on boot)      |
-| **Comment & Layout Preservation** |  ✅ (Preserves format)  | ➖ (Doesn't write files) | ❌ (Destroys layouts)  |   ➖ (Doesn't write files)   |
-| **Input Masking for Secrets**     |    ✅ (Auto-masking)    |            ❌            |           ❌           |              ❌              |
-| **Smart Type Validation**         | ✅ (URL, Email, Number) |            ❌            |           ❌           | ✅ (Validates runtime types) |
+| Feature                                 | `envrepair` | `dotenv-safe` | `sync-dotenv` | `t3-env` / `envalid` |
+| :-------------------------------------- | :---------: | :-----------: | :-----------: | :------------------: |
+| **CLI wrapper (no app imports)**        |     ✅      |      ❌       |      ✅       |          ❌          |
+| **Requires env schema definition**      |     ❌      |      ❌       |      ❌       |          ✅          |
+| **Auto-repairs missing variables**      |     ✅      |      ❌       |      ❌       |          ❌          |
+| **Interactive terminal prompts**        |     ✅      |      ❌       |      ❌       |          ❌          |
+| **Writes while preserving formatting**  |     ✅      |      ❌       |      ❌       |          ❌          |
+| **Input masking for secrets**           |     ✅      |      ❌       |      ❌       |          ❌          |
+| **Interactive type validation**         |     ✅      |      ❌       |      ❌       |          ❌          |
+| **Schema-based validation (Zod, etc.)** |     ❌      |      ❌       |      ❌       |          ✅          |
 
 ## Features
 
