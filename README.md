@@ -33,6 +33,10 @@
 
 Stop crashing your development server because your `.env` is out of sync with `.env.example`. envrepair compares your active `.env` against the template, repairs missing variables interactively, then launches your command while preserving comments, spacing, blank lines, and ordering.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/avenolazo/envrepair/main/assets/demo.gif" alt="envrepair demo" width="600">
+</p>
+
 ## Installation
 
 ### Local Installation (Recommended for teams)
