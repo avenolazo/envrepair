@@ -14,7 +14,7 @@ const program = new Command()
 program
   .name("envrepair")
   .description("Self-healing environment configuration manager for local development")
-  .version("0.1.0")
+  .version("0.1.4")
   .option("-e, --env <path>", "Path to the environment file", defaults.env)
   .option("-x, --example <path>", "Path to the example template file", defaults.example)
 
