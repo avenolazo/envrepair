@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "description": "Self-healing environment configuration manager for local development",
   "type": "module",
-  "main": "./dist/cli.js",
+  "main": "./dist/index.js",
   "bin": {
-    "envrepair": "./dist/cli.js"
+    "envrepair": "./dist/index.js"
   },
   "files": [
     "dist"
