@@ -74,6 +74,10 @@ export interface MissingVariable {
    * Kept to assist developers in understanding the purpose of the variable.
    */
   description?: string
+  /**
+   * The expected validation type (e.g. 'number', 'boolean', 'url', 'email', 'string').
+   */
+  validationType?: "number" | "boolean" | "url" | "email" | "string"
 }
 
 /**

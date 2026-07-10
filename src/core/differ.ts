@@ -25,16 +25,22 @@ function isSensitiveKey(key: string): boolean {
 }
 
 /**
- * Gathers preceding comments for a variable node in the env document.
- * This is used to present the developer with helpful context when prompting for values.
+ * Gathers preceding comments for a variable node in the env document and parses annotations.
+ * This is used to present the developer with helpful context and validation types.
  */
-function extractDescription(doc: EnvDocument, index: number): string | undefined {
-  const comments: string[] = []
+function parseCommentBlock(
+  doc: EnvDocument,
+  index: number,
+): {
+  description?: string
+  validationType?: "number" | "boolean" | "url" | "email" | "string"
+} {
+  const commentLines: string[] = []
   for (let j = index - 1; j >= 0; j--) {
     const line = doc[j]
     if (line.type === "comment") {
       const cleanComment = line.raw.replace(/^#\s*/, "").trim()
-      comments.unshift(cleanComment)
+      commentLines.unshift(cleanComment)
     } else if (line.type === "blank") {
       // Allow single blank lines within comment blocks but stop if multiple blank lines occur.
       if (j - 1 >= 0 && doc[j - 1].type !== "comment") {
@@ -44,7 +50,35 @@ function extractDescription(doc: EnvDocument, index: number): string | undefined
       break
     }
   }
-  return comments.length > 0 ? comments.join("\n") : undefined
+
+  let validationType: "number" | "boolean" | "url" | "email" | "string" | undefined
+  const descriptions: string[] = []
+
+  for (const line of commentLines) {
+    // Matches @type annotations, e.g. "@type number", "@type boolean", etc.
+    const typeMatch = line.match(
+      /^@type\s+(number|int|integer|boolean|bool|url|uri|email|string)\b/i,
+    )
+    if (typeMatch) {
+      const typeStr = typeMatch[1].toLowerCase()
+      if (typeStr === "int" || typeStr === "integer") {
+        validationType = "number"
+      } else if (typeStr === "bool") {
+        validationType = "boolean"
+      } else if (typeStr === "uri") {
+        validationType = "url"
+      } else {
+        validationType = typeStr as any
+      }
+    } else {
+      descriptions.push(line)
+    }
+  }
+
+  return {
+    description: descriptions.length > 0 ? descriptions.join("\n") : undefined,
+    validationType,
+  }
 }
 
 /**
@@ -74,11 +108,13 @@ export function compareEnvs(example: EnvDocument, actual: EnvDocument): DiffResu
 
     // If a key is absent or contains only empty values in the active env, it is missing.
     if (actualValue === undefined || actualValue === "") {
+      const parsedComments = parseCommentBlock(example, i)
       missing.push({
         key,
         defaultValue: line.value !== "" ? line.value : undefined,
         isSensitive: isSensitiveKey(key),
-        description: extractDescription(example, i),
+        description: parsedComments.description,
+        validationType: parsedComments.validationType,
       })
     } else {
       synced.push(key)

@@ -58,4 +58,37 @@ describe("compareEnvs", () => {
     // Verify synced variables detection (DATABASE_URL is in both and has a value)
     expect(result.synced).toEqual(["DATABASE_URL"])
   })
+
+  it("should parse validation annotations from template comments", () => {
+    const example: EnvDocument = [
+      { type: "comment", raw: "# A numeric limit value" },
+      { type: "comment", raw: "# @type number" },
+      { type: "variable", key: "LIMIT", value: "", raw: "LIMIT=" },
+      { type: "comment", raw: "# API endpoints" },
+      { type: "comment", raw: "# @type url" },
+      { type: "variable", key: "API_URL", value: "", raw: "API_URL=" },
+    ]
+
+    const actual: EnvDocument = []
+
+    const result = compareEnvs(example, actual)
+
+    expect(result.missing).toHaveLength(2)
+
+    expect(result.missing.find((v) => v.key === "LIMIT")).toEqual({
+      key: "LIMIT",
+      defaultValue: undefined,
+      isSensitive: false,
+      description: "A numeric limit value",
+      validationType: "number",
+    })
+
+    expect(result.missing.find((v) => v.key === "API_URL")).toEqual({
+      key: "API_URL",
+      defaultValue: undefined,
+      isSensitive: false,
+      description: "API endpoints",
+      validationType: "url",
+    })
+  })
 })
