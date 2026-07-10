@@ -1,8 +1,8 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.jpg">
-    <source media="(prefers-color-scheme: light)" srcset="assets/logo-light.png">
-    <img alt="envrepair logo" src="assets/logo-dark.jpg" width="150" height="150">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/avenolazo/envrepair/main/assets/logo-dark.jpg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/avenolazo/envrepair/main/assets/logo-light.png">
+    <img alt="envrepair logo" src="https://raw.githubusercontent.com/avenolazo/envrepair/main/assets/logo-dark.jpg" width="150" height="150">
   </picture>
 </p>
 
