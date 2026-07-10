@@ -1,8 +1,8 @@
 # envrepair
 
-An environment configuration manager for local development.
+Environment configuration manager for local development.
 
-`envrepair` is a command line tool that validates your active `.env` file against `.env.example` before launching your application process. If any variables are missing, the tool prompts for their values interactively in the terminal (masking sensitive fields) and updates `.env` without modifying existing formatting, comments, or blank lines.
+`envrepair` validates your active `.env` file against `.env.example` before running your startup scripts. If variables are missing, the tool prompts for their values interactively in the terminal (masking credentials) and appends them to `.env` while preserving all comments, blank lines, and formatting.
 
 ## Table of Contents
 
@@ -12,15 +12,14 @@ An environment configuration manager for local development.
 - [Command Reference](#command-reference)
 - [Options](#options)
 - [CI/CD Integration](#cicd-integration)
-- [Technical Architecture and Design](#technical-architecture-and-design)
 - [License](#license)
 
 ## Features
 
-- **Format preservation**: Parses env documents into structured line arrays, preserving comments, spacing, and ordering when writing new variables.
-- **Interactive inputs**: Collects missing variables in the terminal and uses masked inputs for sensitive key patterns (passwords, tokens, keys).
-- **Process proxying**: Executes target commands transparently, forwarding termination signals and returning the child process exit code.
-- **CI/CD validation**: Automatically falls back to validation and reports errors without hanging in non-interactive environments.
+- **Format preservation**: Parses env files into structural node arrays, ensuring comments, spacing, and ordering are kept intact when new variables are appended.
+- **Interactive inputs**: Prompts for missing variables using masked inputs for sensitive key patterns (passwords, tokens, keys) and standard inputs for public options.
+- **Process proxying**: Executes target commands as a transparent child process, forwarding signals and mirroring the exit code.
+- **CI/CD validation**: Automatically falls back to diagnostic checks without hanging in headless environments.
 
 ## Installation
 
@@ -30,7 +29,7 @@ Install globally:
 npm install -g envrepair
 ```
 
-Or execute on demand:
+Or run on demand:
 
 ```bash
 npx envrepair
@@ -44,15 +43,15 @@ Prepend your start command with `envrepair`:
 envrepair next dev
 ```
 
-The execution flow runs as follows:
-1. `envrepair` compares `.env` against `.env.example`.
-2. If variables are missing or empty, the CLI prompts for values.
-3. Entered values are appended to `.env` while leaving original lines unchanged.
-4. The target process (`next dev`) is spawned with inherited standard input and output streams.
+The tool will:
+1. Compare `.env` against `.env.example`.
+2. Prompt for inputs in the terminal if variables are missing or empty.
+3. Append updates to `.env` while keeping existing formatting.
+4. Spawn the target command (`next dev`) with inherited standard input and output streams.
 
 ## Command Reference
 
-### Default Proxy
+### Default Mode
 
 ```bash
 envrepair [target-command]
@@ -66,7 +65,7 @@ Checks environment validity, runs interactive repair if needed, and proxy execut
 envrepair doctor
 ```
 
-Analyzes the environment files and outputs a status report of synced, missing, and unused variables. Exits with status 1 if missing variables exist.
+Outputs a status report of synced, missing, and unused variables. Exits with status 1 if missing variables exist.
 
 ### repair
 
@@ -82,7 +81,7 @@ Runs the interactive terminal prompt flow to repair missing variables without st
 envrepair diff [--json]
 ```
 
-Calculates the difference between active and template environment files. Prints plain text or structured JSON.
+Calculates differences between active and template environment files. Prints plain text or structured JSON.
 
 ### check
 
@@ -90,7 +89,7 @@ Calculates the difference between active and template environment files. Prints 
 envrepair check
 ```
 
-Runs validation without interactive prompts, outputs differences in JSON, and exits with status 1 if variables are missing. Designed for automated scripting.
+Runs validation without interactive prompts, outputs differences in JSON, and exits with status 1 if variables are missing. Designed for CI/CD scripting.
 
 ## Options
 
@@ -100,21 +99,12 @@ Runs validation without interactive prompts, outputs differences in JSON, and ex
 
 ## CI/CD Integration
 
-In headless environments, `envrepair` automatically skips prompts and exits with status 1 if variables are missing:
+In headless environments, `envrepair` skips prompts and exits with status 1 if variables are missing:
 
 ```bash
 # Validates environment state and exits with 0 or 1.
 envrepair check
 ```
-
-## Technical Architecture and Design
-
-Detailed specifications and architectural plans can be found in the project documentation:
-
-- [Architecture Design](docs/03_architecture_design.md): Directory structure, module contracts, and data flows.
-- [Parser Specification](docs/04_parser_specification.md): Value extraction grammar, quoting styles, escaping rules, and edge cases.
-- [Competitive Landscape](docs/01_competitive_landscape.md): Gap analysis and comparisons with other dotenv validation tools.
-- [Dependency Audit](docs/02_tech_stack_validation.md): Dependency rationalization and build configuration details.
 
 ## License
 
