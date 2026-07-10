@@ -7,10 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.3] - 2026-07-10
 
+### Added
+
+- Added interactive terminal demo GIF to the top of the README.
+- Added a full console quick demo video (`walkthrough.mp4`) directly in the README.
+
 ### Changed
 
 - Expanded README installation guide to support local project dependency options (npm, pnpm, yarn).
 - Documented the recommended workflow for devDependencies and package.json dev scripts.
+- Restructured and polished the README layout, including logo alignment, brand name casing, GitHub alert boxes, and section reordering.
+- Removed all em-dashes and refined language grammar throughout the documentation.
 
 ## [0.1.2] - 2026-07-10
 
