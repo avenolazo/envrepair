@@ -204,4 +204,4 @@ envrepair check
 
 ## License
 
-MIT
+[MIT](https://github.com/avenolazo/envrepair/blob/main/LICENSE)
