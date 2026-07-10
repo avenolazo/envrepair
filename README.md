@@ -109,9 +109,7 @@ $ envrepair next dev
 
 ## Video Walkthrough
 
-<p align="center">
-  <video src="assets/walkthrough.mp4" width="100%" controls></video>
-</p>
+  <video src="https://github.com/user-attachments/assets/eb0232f4-8c4c-42a5-bb2a-7c28ee084467" width="100%" controls></video>
 
 ## Features
 
