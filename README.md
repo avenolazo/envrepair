@@ -109,7 +109,7 @@ $ envrepair next dev
 
 ## Video Walkthrough
 
-  <video src="https://github.com/user-attachments/assets/eb0232f4-8c4c-42a5-bb2a-7c28ee084467" width="100%" controls></video>
+<video src="https://github.com/user-attachments/assets/eb0232f4-8c4c-42a5-bb2a-7c28ee084467" width="100%" controls></video>
 
 ## Features
 
