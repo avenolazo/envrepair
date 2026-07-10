@@ -2,11 +2,6 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import type { WriterOptions } from "./types.js"
 
-/**
- * Safely formats an environment variable value for writing to a .env file.
- * Wraps values in double quotes and escapes special characters if spaces,
- * comment markers, or quotes are detected, ensuring parsing fidelity.
- */
 function formatEnvValue(value: string): string {
   const needsQuoting = /[\s'"#\n\r]/.test(value)
   if (needsQuoting) {
@@ -54,7 +49,6 @@ export async function appendVariables(
     // Ensure parent directories exist before creating the file.
     await fs.mkdir(path.dirname(filePath), { recursive: true })
 
-    // Format new entries with trailing newline.
     const newContent =
       entries.map((entry) => `${entry.key}=${formatEnvValue(entry.value)}`).join("\n") + "\n"
 
@@ -62,7 +56,6 @@ export async function appendVariables(
     return
   }
 
-  // File exists: append to it safely.
   const content = await fs.readFile(filePath, "utf-8")
   let appendPrefix = ""
 

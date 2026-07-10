@@ -1,31 +1,19 @@
 import fs from "node:fs/promises"
 import type { EnvDocument } from "./types.js"
 
-// Matches standard environment variable declarations, supporting optional 'export' prefixes.
-// Supports leading whitespace before the key or export prefix.
-// Group 1 captures the key name, Group 2 captures the raw value string after the equals sign.
 const VARIABLE_REGEX = /^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/
 
-/**
- * Strips the UTF-8 Byte Order Mark (BOM) if present.
- * This prevents BOM characters from corrupting the first parsed key name.
- */
 function stripBOM(content: string): string {
+  // Prevent Byte Order Mark (BOM) characters from corrupting the first parsed key name.
   if (content.charCodeAt(0) === 0xfeff) {
     return content.slice(1)
   }
   return content
 }
 
-/**
- * Extracts and decodes the value of a parsed variable.
- * Preserves quotes and escape sequences for double-quoted values,
- * treats single quotes literally, and removes inline comments for unquoted values.
- */
 function extractValue(rawValue: string): string {
   const trimmed = rawValue.trim()
 
-  // Handle double-quoted values: resolve escape sequences and strip wrapping quotes.
   if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
     return trimmed
       .slice(1, -1)
@@ -36,12 +24,10 @@ function extractValue(rawValue: string): string {
       .replace(/\\"/g, '"')
   }
 
-  // Handle single-quoted values: treat everything literally and strip wrapping quotes.
   if (trimmed.startsWith("'") && trimmed.endsWith("'")) {
     return trimmed.slice(1, -1)
   }
 
-  // Handle unquoted values: strip inline comments if preceded by whitespace.
   const commentIndex = trimmed.indexOf(" #")
   if (commentIndex !== -1) {
     return trimmed.substring(0, commentIndex).trim()
@@ -71,13 +57,11 @@ export async function parseEnv(filePath: string): Promise<EnvDocument> {
     const trimmedLine = cleanLine.trim()
 
     if (trimmedLine === "") {
-      // Preserve blank lines for structural spacing.
       document.push({
         type: "blank",
         raw: rawLine,
       })
     } else if (trimmedLine.startsWith("#")) {
-      // Preserve standalone comments.
       document.push({
         type: "comment",
         raw: rawLine,

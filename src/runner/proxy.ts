@@ -1,7 +1,5 @@
 import spawn from "cross-spawn"
 
-// Signals that must be forwarded to the child process.
-// Ensures that user interruptions (like Ctrl+C) clean up both the proxy and the target app.
 const FORWARDED_SIGNALS = ["SIGINT", "SIGTERM", "SIGHUP"] as const
 
 /**
@@ -15,17 +13,16 @@ const FORWARDED_SIGNALS = ["SIGINT", "SIGTERM", "SIGHUP"] as const
 export function launchProcess(command: string, args: string[]): void {
   const child = spawn(command, args, { stdio: "inherit" })
 
-  // Propagate key interruption signals down to the child process
-  // to ensure child handles shutdown and does not become a zombie.
   for (const signal of FORWARDED_SIGNALS) {
     process.on(signal, () => {
+      // Prevent spawning zombie processes by ensuring child receives the signal
+      // to terminate cleanly before the parent process exits.
       if (!child.killed) {
         child.kill(signal)
       }
     })
   }
 
-  // Bubble child termination statuses back up to the parent shell.
   child.on("close", (code, signal) => {
     if (signal) {
       process.kill(process.pid, signal)

@@ -2,12 +2,8 @@ import { input, password } from "@inquirer/prompts"
 import type { MissingVariable } from "../core/types.js"
 import { isCI } from "../utils/ci.js"
 
-/**
- * Creates an interactive validator function based on the variable's type constraints.
- */
 function createValidator(variable: MissingVariable) {
   return (value: string): boolean | string => {
-    // If empty and there is a default value, allow it (will fall back to default)
     if (!value && variable.defaultValue !== undefined) {
       return true
     }
@@ -65,7 +61,6 @@ export async function promptForMissing(
 
   try {
     for (const variable of missing) {
-      // Build prompt message incorporating variable comments/description.
       const message =
         variable.description ? `${variable.key} (${variable.description})` : variable.key
 
