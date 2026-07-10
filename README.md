@@ -189,7 +189,7 @@ No. `envrepair` is designed for local development. In CI environments it skips p
 
 ### dotenv-safe
 
-`dotenv-safe` intentionally fails fast — it crashes your app if variables are missing and leaves you to find and fix them manually. `envrepair` guides you through repairing them interactively before your app ever starts.
+`dotenv-safe` intentionally fails fast, crashing your app if variables are missing and leaving you to find and fix them manually. `envrepair` guides you through repairing them interactively before your app ever starts.
 
 ### t3-env / envalid
 
