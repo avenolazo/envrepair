@@ -29,8 +29,16 @@
     "developer-tools",
     "self-healing"
   ],
-  "author": "",
+  "author": "Aven Olazo",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avenolazo/envrepair.git"
+  },
+  "bugs": {
+    "url": "https://github.com/avenolazo/envrepair/issues"
+  },
+  "homepage": "https://github.com/avenolazo/envrepair#readme",
   "engines": {
     "node": ">=20.0.0"
   },
