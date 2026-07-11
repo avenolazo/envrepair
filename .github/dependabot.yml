@@ -1,0 +1,6 @@
+version: 2
+updates:
+  - package-ecosystem: "npm" # Dependabot handles pnpm-lock.yaml automatically under the npm ecosystem
+    directory: "/"
+    schedule:
+      interval: "weekly"
