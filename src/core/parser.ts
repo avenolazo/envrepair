@@ -15,13 +15,22 @@ const extractValue = (rawValue: string): string => {
   const trimmed = rawValue.trim()
 
   if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
-    return trimmed
-      .slice(1, -1)
-      .replace(/\\n/g, "\n")
-      .replace(/\\r/g, "\r")
-      .replace(/\\t/g, "\t")
-      .replace(/\\\\/g, "\\")
-      .replace(/\\"/g, '"')
+    return trimmed.slice(1, -1).replace(/\\([nrt\\"])/g, (_, esc) => {
+      switch (esc) {
+        case "n":
+          return "\n"
+        case "r":
+          return "\r"
+        case "t":
+          return "\t"
+        case "\\":
+          return "\\"
+        case '"':
+          return '"'
+        default:
+          return esc
+      }
+    })
   }
 
   if (trimmed.startsWith("'") && trimmed.endsWith("'")) {

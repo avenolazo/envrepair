@@ -1,4 +1,4 @@
-import { execSync } from "node:child_process"
+import { execFileSync } from "node:child_process"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
@@ -8,6 +8,19 @@ import { appendVariables } from "../src/core/writer.js"
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const tempDir = path.join(__dirname, "temp-integration-tests")
+const distCliPath = path.resolve(__dirname, "../dist/index.js")
+
+/**
+ * Helper to run the compiled CLI binary securely without invoking a shell.
+ */
+const runCli = (args: string[], options: { cwd?: string; stdio?: any } = {}): string => {
+  const result = execFileSync("node", [distCliPath, ...args], {
+    encoding: "utf-8",
+    stdio: options.stdio || "pipe",
+    cwd: options.cwd,
+  })
+  return result
+}
 
 describe("CLI Integration Tests", () => {
   beforeEach(async () => {
@@ -29,15 +42,9 @@ describe("CLI Integration Tests", () => {
     const envPath = path.join(tempDir, ".env")
     const examplePath = path.join(tempDir, ".env.example")
 
-    // Run using ts-node or vitest execution wrapper.
-    // Since we bundle to dist, let's run the bundled script.
-    const distCliPath = path.resolve(__dirname, "../dist/index.js")
-
     let error: any
     try {
-      execSync(`node ${distCliPath} --env ${envPath} --example ${examplePath} doctor`, {
-        stdio: "pipe",
-      })
+      runCli(["--env", envPath, "--example", examplePath, "doctor"])
     } catch (err: any) {
       error = err
     }
@@ -51,15 +58,12 @@ describe("CLI Integration Tests", () => {
   })
 
   it("should run check command, output JSON, and exit with status 1 on missing variables", () => {
-    const distCliPath = path.resolve(__dirname, "../dist/index.js")
     const envPath = path.join(tempDir, ".env")
     const examplePath = path.join(tempDir, ".env.example")
 
     let error: any
     try {
-      execSync(`node ${distCliPath} --env ${envPath} --example ${examplePath} check`, {
-        stdio: "pipe",
-      })
+      runCli(["--env", envPath, "--example", examplePath, "check"])
     } catch (err: any) {
       error = err
     }
@@ -73,7 +77,6 @@ describe("CLI Integration Tests", () => {
   })
 
   it("should pass doctor and check command when environment is synced", async () => {
-    const distCliPath = path.resolve(__dirname, "../dist/index.js")
     const envPath = path.join(tempDir, ".env")
     const examplePath = path.join(tempDir, ".env.example")
 
@@ -81,21 +84,11 @@ describe("CLI Integration Tests", () => {
     await fs.writeFile(envPath, "DB_URL=postgres://prod\nPORT=3000\n", "utf-8")
 
     // Test doctor command succeeds.
-    const doctorStdout = execSync(
-      `node ${distCliPath} --env ${envPath} --example ${examplePath} doctor`,
-      {
-        encoding: "utf-8",
-      },
-    )
+    const doctorStdout = runCli(["--env", envPath, "--example", examplePath, "doctor"])
     expect(doctorStdout).toContain("Environment is healthy and fully synced.")
 
     // Test check command succeeds and outputs JSON with empty missing array.
-    const checkStdout = execSync(
-      `node ${distCliPath} --env ${envPath} --example ${examplePath} check`,
-      {
-        encoding: "utf-8",
-      },
-    )
+    const checkStdout = runCli(["--env", envPath, "--example", examplePath, "check"])
     const parsed = JSON.parse(checkStdout)
     expect(parsed.missing).toHaveLength(0)
     expect(parsed.synced).toContain("DB_URL")
@@ -103,8 +96,6 @@ describe("CLI Integration Tests", () => {
   })
 
   it("should auto-detect and prioritize .env.local when running in directory without path arguments", async () => {
-    const distCliPath = path.resolve(__dirname, "../dist/index.js")
-
     // Create a temporary workspace root.
     const workspaceDir = path.join(tempDir, "workspace")
     await fs.mkdir(workspaceDir, { recursive: true })
@@ -116,10 +107,7 @@ describe("CLI Integration Tests", () => {
 
     // Run check command from the workspace CWD.
     // It should automatically discover .env.local and consider it fully synced.
-    const checkStdout = execSync(`node ${distCliPath} check`, {
-      cwd: workspaceDir,
-      encoding: "utf-8",
-    })
+    const checkStdout = runCli(["check"], { cwd: workspaceDir })
 
     const parsed = JSON.parse(checkStdout)
     expect(parsed.missing).toHaveLength(0)
@@ -128,7 +116,6 @@ describe("CLI Integration Tests", () => {
   })
 
   it("should identify unused variables in doctor report but not fail execution", async () => {
-    const distCliPath = path.resolve(__dirname, "../dist/index.js")
     const envPath = path.join(tempDir, ".env")
     const examplePath = path.join(tempDir, ".env.example")
 
@@ -136,18 +123,12 @@ describe("CLI Integration Tests", () => {
     await fs.writeFile(envPath, "DB_URL=postgres://prod\nPORT=3000\nEXTRA_VAR=some_val\n", "utf-8")
 
     // Test doctor command succeeds (exit code 0) even with unused variables.
-    const doctorStdout = execSync(
-      `node ${distCliPath} --env ${envPath} --example ${examplePath} doctor`,
-      {
-        encoding: "utf-8",
-      },
-    )
+    const doctorStdout = runCli(["--env", envPath, "--example", examplePath, "doctor"])
     expect(doctorStdout).toContain("Environment is healthy and fully synced.")
     expect(doctorStdout).toContain("EXTRA_VAR (unused)")
   })
 
   it("should preserve format (comments, blank lines) during repair updates", async () => {
-    const distCliPath = path.resolve(__dirname, "../dist/index.js")
     const envPath = path.join(tempDir, ".env")
     const examplePath = path.join(tempDir, ".env.example")
 
@@ -160,9 +141,7 @@ describe("CLI Integration Tests", () => {
     // We execute check first to confirm it is missing.
     let error: any
     try {
-      execSync(`node ${distCliPath} --env ${envPath} --example ${examplePath} check`, {
-        stdio: "pipe",
-      })
+      runCli(["--env", envPath, "--example", examplePath, "check"])
     } catch (err: any) {
       error = err
     }
