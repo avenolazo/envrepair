@@ -50,6 +50,10 @@ export interface DiffResult {
    * Variables present and populated in both documents.
    */
   synced: string[]
+  /**
+   * Variables found in the example file that are marked optional and missing or empty in the active environment.
+   */
+  optional: string[]
 }
 
 /**

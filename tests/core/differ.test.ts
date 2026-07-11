@@ -115,4 +115,23 @@ describe("compareEnvs", () => {
     expect(result.missing.find((v) => v.key === "BCRYPT_SALT")?.isSensitive).toBe(true)
     expect(result.missing.find((v) => v.key === "PUBLIC_CONFIG")?.isSensitive).toBe(false)
   })
+
+  it("should parse optional annotations and separate them from required missing variables", () => {
+    const example: EnvDocument = [
+      { type: "comment", raw: "# An optional analytic key" },
+      { type: "comment", raw: "# @optional" },
+      { type: "variable", key: "ANALYTICS_KEY", value: "", raw: "ANALYTICS_KEY=" },
+      { type: "comment", raw: "# A required database key" },
+      { type: "variable", key: "DATABASE_URL", value: "", raw: "DATABASE_URL=" },
+    ]
+
+    const actual: EnvDocument = []
+
+    const result = compareEnvs(example, actual)
+
+    expect(result.missing).toHaveLength(1)
+    expect(result.missing[0].key).toBe("DATABASE_URL")
+
+    expect(result.optional).toEqual(["ANALYTICS_KEY"])
+  })
 })

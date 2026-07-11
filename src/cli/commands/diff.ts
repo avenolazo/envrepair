@@ -47,6 +47,17 @@ export async function runDiff(
 
   console.log()
 
+  if (diff.optional.length > 0) {
+    console.log("Optional Variables (missing):")
+    for (const key of diff.optional) {
+      console.log(`  - ${key}`)
+    }
+  } else {
+    console.log("No missing optional variables.")
+  }
+
+  console.log()
+
   if (diff.unused.length > 0) {
     console.log("Unused Variables:")
     for (const key of diff.unused) {

@@ -27,6 +27,7 @@ const parseCommentBlock = (
 ): {
   description?: string
   validationType?: "number" | "boolean" | "url" | "email" | "string"
+  isOptional?: boolean
 } => {
   const commentLines: string[] = []
   for (let j = index - 1; j >= 0; j--) {
@@ -46,6 +47,7 @@ const parseCommentBlock = (
   }
 
   let validationType: "number" | "boolean" | "url" | "email" | "string" | undefined
+  let isOptional = false
   const descriptions: string[] = []
 
   for (const line of commentLines) {
@@ -63,6 +65,8 @@ const parseCommentBlock = (
       } else {
         validationType = typeStr as any
       }
+    } else if (line.match(/^@optional\b/i)) {
+      isOptional = true
     } else {
       descriptions.push(line)
     }
@@ -71,6 +75,7 @@ const parseCommentBlock = (
   return {
     description: descriptions.length > 0 ? descriptions.join("\n") : undefined,
     validationType,
+    isOptional,
   }
 }
 
@@ -88,6 +93,7 @@ export const compareEnvs = (example: EnvDocument, actual: EnvDocument): DiffResu
 
   const missing: MissingVariable[] = []
   const synced: string[] = []
+  const optional: string[] = []
 
   for (let i = 0; i < example.length; i++) {
     const line = example[i]
@@ -100,13 +106,17 @@ export const compareEnvs = (example: EnvDocument, actual: EnvDocument): DiffResu
 
     if (actualValue === undefined || actualValue === "") {
       const parsedComments = parseCommentBlock(example, i)
-      missing.push({
-        key,
-        defaultValue: line.value !== "" ? line.value : undefined,
-        isSensitive: isSensitiveKey(key),
-        description: parsedComments.description,
-        validationType: parsedComments.validationType,
-      })
+      if (parsedComments.isOptional) {
+        optional.push(key)
+      } else {
+        missing.push({
+          key,
+          defaultValue: line.value !== "" ? line.value : undefined,
+          isSensitive: isSensitiveKey(key),
+          description: parsedComments.description,
+          validationType: parsedComments.validationType,
+        })
+      }
     } else {
       synced.push(key)
     }
@@ -125,5 +135,6 @@ export const compareEnvs = (example: EnvDocument, actual: EnvDocument): DiffResu
     missing,
     unused,
     synced,
+    optional,
   }
 }

@@ -32,11 +32,13 @@ export const log = {
    * @param status - The configuration state ('synced', 'missing', or 'unused').
    * @param val - Optional current value to display alongside synced keys.
    */
-  variable: (key: string, status: "synced" | "missing" | "unused", val?: string) => {
+  variable: (key: string, status: "synced" | "missing" | "unused" | "optional", val?: string) => {
     if (status === "synced") {
       console.log(`  ${pc.green("✓")} ${pc.bold(key)}=${pc.gray(val ?? "")}`)
     } else if (status === "missing") {
       console.log(`  ${pc.red("✗")} ${pc.bold(pc.red(key))} ${pc.dim("(missing)")}`)
+    } else if (status === "optional") {
+      console.log(`  ${pc.yellow("⚠")} ${pc.bold(pc.yellow(key))} ${pc.dim("(optional)")}`)
     } else {
       console.log(`  ${pc.yellow("⚠")} ${pc.bold(pc.yellow(key))} ${pc.dim("(unused)")}`)
     }

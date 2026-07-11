@@ -27,8 +27,11 @@ export async function runDoctor(envPath: string, examplePath: string): Promise<v
   for (const line of example) {
     if (line.type === "variable" && line.key !== undefined) {
       const isMissing = diff.missing.some((v) => v.key === line.key)
+      const isOptional = diff.optional.includes(line.key)
       if (isMissing) {
         log.variable(line.key, "missing")
+      } else if (isOptional) {
+        log.variable(line.key, "optional")
       } else {
         log.variable(line.key, "synced", actualVars.get(line.key))
       }
