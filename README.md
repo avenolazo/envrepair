@@ -25,6 +25,12 @@
 </p>
 
 <p align="center">
+  <a href="https://nodei.co/npm/envrepair/">
+    <img src="https://nodei.co/npm/envrepair.png?downloads=true&downloadRank=true&stars=true" alt="NPM stats">
+  </a>
+</p>
+
+<p align="center">
   <a href="#installation">Installation</a> •
   <a href="#quick-start">Quick Start</a> •
   <a href="#features">Features</a> •
