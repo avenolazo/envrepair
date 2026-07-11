@@ -3,6 +3,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { describe, it, expect, beforeEach, afterEach } from "vitest"
+import { appendVariables } from "../src/core/writer.js"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -168,8 +169,9 @@ describe("CLI Integration Tests", () => {
     expect(error).toBeDefined()
 
     // Verify raw comments are preserved and PORT gets added.
-    const updatedContent = initialContent + "\n# --- Added ---\nPORT=3000\n"
-    await fs.writeFile(envPath, updatedContent, "utf-8")
+    await appendVariables(envPath, [{ key: "PORT", value: "3000" }], {
+      separator: "# --- Added ---",
+    })
 
     const finalContent = await fs.readFile(envPath, "utf-8")
     expect(finalContent).toContain("# My local development configuration")
