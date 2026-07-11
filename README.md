@@ -15,9 +15,6 @@
   <a href="https://github.com/avenolazo/envrepair/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/avenolazo/envrepair.svg?style=flat-square" alt="license">
   </a>
-  <a href="https://bundlephobia.com/package/envrepair">
-    <img src="https://img.shields.io/badge/dependencies-zero-brightgreen.svg?style=flat-square" alt="zero dependencies">
-  </a>
 </p>
 
 <p align="center">
