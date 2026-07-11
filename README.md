@@ -32,7 +32,8 @@
   <a href="#quick-start">Quick Start</a> •
   <a href="#features">Features</a> •
   <a href="#faq">FAQ</a> •
-  <a href="#command-reference">Command Reference</a>
+  <a href="#command-reference">Command Reference</a> •
+  <a href="CONTRIBUTING.md">Contributing</a>
 </p>
 
 ---
@@ -290,6 +291,10 @@ In headless environments, `envrepair` skips prompts and exits with status 1 if v
 # Validates environment state and exits with 0 or 1.
 envrepair check
 ```
+
+## Contributing
+
+Contributions are welcome! Please check the [Contributing Guidelines](CONTRIBUTING.md).
 
 ## License
 
