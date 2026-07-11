@@ -16,16 +16,42 @@ export interface EnvFilePaths {
 }
 
 /**
+ * Searches upward from a starting directory to find the closest directory containing .env.example.
+ * This ensures the CLI finds the correct repository root config when run from subdirectories.
+ *
+ * @param startDir - The directory path to begin the upward search.
+ * @returns The directory path where .env.example was found, or the original startDir as a fallback.
+ */
+const findProjectRoot = async (startDir: string): Promise<string> => {
+  let dir = startDir
+  while (true) {
+    const hasExample = await fileExists(path.join(dir, ".env.example"))
+    if (hasExample) {
+      return dir
+    }
+
+    const parent = path.dirname(dir)
+    if (parent === dir) {
+      break
+    }
+    dir = parent
+  }
+  return startDir
+}
+
+/**
  * Resolves standard env and example file paths relative to the working directory.
- * Ensures the CLI behaves consistently when executed from subfolders.
+ * Walks upward if no .env.example is found in the current working directory.
  *
  * @param cwd - Working directory to search, defaults to process.cwd().
  * @returns Object containing absolute paths to the environment files.
  */
 export const findEnvFiles = async (cwd: string = process.cwd()): Promise<EnvFilePaths> => {
-  const envLocalPath = path.resolve(cwd, ".env.local")
-  const envPath = path.resolve(cwd, ".env")
-  const examplePath = path.resolve(cwd, ".env.example")
+  const projectRoot = await findProjectRoot(cwd)
+
+  const envLocalPath = path.resolve(projectRoot, ".env.local")
+  const envPath = path.resolve(projectRoot, ".env")
+  const examplePath = path.resolve(projectRoot, ".env.example")
 
   const hasEnvLocal = await fileExists(envLocalPath)
 

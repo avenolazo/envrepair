@@ -36,4 +36,21 @@ describe("findEnvFiles", () => {
     expect(paths.env).toBe(path.resolve(dummyCwd, ".env.local"))
     expect(paths.example).toBe(path.resolve(dummyCwd, ".env.example"))
   })
+
+  it("should walk up parent directories to find .env.example if missing in current directory", async () => {
+    const subCwd = "/test/project/src"
+
+    vi.spyOn(fs, "access").mockImplementation(async (filePath) => {
+      const p = filePath.toString()
+      if (p === "/test/project/.env.example" || p === "/test/project/.env.local") {
+        return // File exists
+      }
+      throw new Error("ENOENT")
+    })
+
+    const paths = await findEnvFiles(subCwd)
+
+    expect(paths.env).toBe("/test/project/.env.local")
+    expect(paths.example).toBe("/test/project/.env.example")
+  })
 })
