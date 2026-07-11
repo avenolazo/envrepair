@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] - 2026-07-11
+
+### Added
+
+- Added support for optional variables annotated with `# @optional` in `.env.example` templates, allowing optional services to skip verification prompts and check failures.
+- Added a comprehensive developer guide in `CONTRIBUTING.md` covering setup, testing, formatting, and Conventional Commits.
+- Configured automated security scanning via GitHub CodeQL workflow.
+- Configured repository sponsorship in `.github/FUNDING.yml` and dependency updates in `.github/dependabot.yml`.
+
+### Changed
+
+- Downgraded repository package manager requirement to `pnpm@9.15.4` and added workspace packages configurations to resolve Dependabot lockfile parsing errors.
+
 ## [0.1.4] - 2026-07-11
 
 ### Changed
