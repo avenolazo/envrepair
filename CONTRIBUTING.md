@@ -1,10 +1,10 @@
 # Contributing to envrepair
 
-Thank you for contributing to `envrepair`. Follow these guidelines to ensure a smooth contribution process.
+Guidelines for contributing to `envrepair`.
 
 ---
 
-## 🛠️ Development Setup
+## Development Setup
 
 ### Prerequisites
 
@@ -24,11 +24,11 @@ pnpm install
 
 ---
 
-## 💻 Development Workflow
+## Development Workflow
 
 ### Building
 
-`envrepair` uses `tsup` to bundle all runtime dependencies into a zero-dependency ESM distribution. Run the build script before packing or testing final outputs:
+Build the zero-dependency distribution before testing or releasing:
 
 ```bash
 pnpm build
@@ -36,7 +36,7 @@ pnpm build
 
 ### Running Tests
 
-All logic must be accompanied by vitest test coverage.
+Verify logic with Vitest:
 
 ```bash
 # Run tests once
@@ -48,28 +48,27 @@ pnpm test:watch
 
 ### Linting & Formatting
 
-Ensure all files conform to the ESLint and Prettier configs before pushing:
+Ensure code conforms to formatting and linting rules:
 
 ```bash
-# Run linting and formatting fixes
 pnpm fix
 ```
 
 ---
 
-## 📐 Code Guidelines
+## Code Guidelines
 
-1. **Zero Runtime Dependencies**: Do not add new packages to the `"dependencies"` object in `package.json`. If you require a utility, implement it directly or install it as a devDependency to be bundled by `tsup` (`noExternal` configuration).
-2. **Format Preservation**: Any changes to `parser.ts` or `writer.ts` must maintain complete compatibility with the format-preserving philosophy (comments, whitespace, blank lines, and formatting must not be destroyed).
-3. **TSDoc / JSDoc**: Every exported function must include TSDoc/JSDoc annotations. Document the **why** (rationale, assumptions, side effects) rather than the **what**.
+1. **Zero Runtime Dependencies**: Do not add packages to the `"dependencies"` object in `package.json`. Install dependencies as a devDependency to be bundled by `tsup` via the `noExternal` configuration.
+2. **Format Preservation**: Modifications to `parser.ts` or `writer.ts` must maintain compatibility with the format-preserving implementation (comments, whitespace, blank lines, and ordering).
+3. **TSDoc / JSDoc**: Exported functions must include JSDoc/TSDoc annotations. Document the **why** (rationale, assumptions, side-effects) rather than the **what**.
 
 ---
 
-## 📝 Commit Messages
+## Commit Messages
 
-We enforce the [Conventional Commits](https://www.conventionalcommits.org/) specification for clear history and automatic changelog generation.
+Commit messages must follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
 
-### Formats
+### Format
 
 ```text
 <type>(<scope>): <description>
@@ -86,9 +85,9 @@ We enforce the [Conventional Commits](https://www.conventionalcommits.org/) spec
 
 ---
 
-## 🚀 Pull Request Process
+## Pull Request Process
 
-1. Create a branch named after the feature/bug (e.g. `feat/my-feature` or `fix/issue-id`).
-2. Implement your changes, run `pnpm fix`, and verify all tests pass (`pnpm test`).
+1. Create a branch named after the feature/bug (e.g., `feat/my-feature` or `fix/issue-id`).
+2. Run `pnpm fix` and verify all tests pass (`pnpm test`).
 3. Open a Pull Request on GitHub.
-4. Ensure the PR title follows the Conventional Commit format (as PRs are squashed and merged).
+4. Ensure the PR title follows the Conventional Commit format.
