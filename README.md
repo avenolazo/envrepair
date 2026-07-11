@@ -52,6 +52,9 @@ pnpm add -D envrepair
 
 # yarn
 yarn add -D envrepair
+
+# bun
+bun add -d envrepair
 ```
 
 Then, prepend your startup scripts in `package.json`:
@@ -71,7 +74,8 @@ Install globally or run on-demand without a local installation:
 npm install -g envrepair
 
 # Or run instantly on demand
-npx envrepair [command]
+npx envrepair [command] # npm
+bunx envrepair [command] # bun
 ```
 
 ## Quick Start
@@ -166,6 +170,21 @@ API_BASE_URL:
 ```
 
 Supported validation types: `string`, `number`, `boolean`, `url`, `email`.
+
+## Optional Variables
+
+If your application has optional integrations (e.g. Sentry, Datadog) that are not strictly required for local development, mark them with a `# @optional` annotation in `.env.example`:
+
+```env
+# @optional
+SENTRY_DSN=
+```
+
+When marked optional:
+
+- `envrepair` will not prompt you for this key during setup.
+- It will not cause diagnostic checks (`doctor`, `check`) or CI runs to fail if it is missing or empty.
+- It will still be listed as `optional` in `doctor` and `diff` command reports.
 
 ## FAQ
 
