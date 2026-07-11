@@ -15,10 +15,13 @@
   <a href="https://github.com/avenolazo/envrepair/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/avenolazo/envrepair.svg?style=flat-square" alt="license">
   </a>
+  <a href="https://bundlephobia.com/package/envrepair">
+    <img src="https://img.shields.io/badge/dependencies-zero-brightgreen.svg?style=flat-square" alt="zero dependencies">
+  </a>
 </p>
 
 <p align="center">
-  <strong>A CLI wrapper that detects and repairs missing environment variables before your app starts.</strong>
+  <strong>A zero-dependency CLI wrapper that detects and repairs missing environment variables before your app starts.</strong>
 </p>
 
 <p align="center">
@@ -117,6 +120,7 @@ $ envrepair next dev
 
 ## Features
 
+- **Zero runtime dependencies.** Bundles all internal CLI utilities (prompts, spawners, parsers) to ensure instant installs, minimal footprint, and zero supply chain vulnerability risks.
 - **Preserves your `.env` exactly as you organized it.** Comments, spacing, blank lines, and ordering stay intact.
 - **Rejects invalid formats before they reach your application.** Validates URLs, emails, numbers, and booleans in real-time using `# @type` annotations in your template.
 - **Masks credentials automatically.** Any key matching common sensitive patterns (PASSWORD, SECRET, TOKEN, KEY, etc.) is prompted with hidden input.
@@ -208,6 +212,7 @@ No. `envrepair` is designed for local development. In CI environments it skips p
 | **Input masking for secrets**                              |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
 | **Interactive typed input prompts**                        |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
 | **Schema-based validation (Zod, etc.)**                    |     ❌      |      ❌       |      ❌       |    ❌     |    ✅    |
+| **Zero runtime dependencies**                              |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
 
 > [!NOTE]
 > `envrepair` focuses on interactive environment setup and automatic repair before your application starts. Tools like `t3-env` and `envalid` focus on validating environment variables inside your application at runtime. These tools solve different problems and can be used together.
