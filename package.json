@@ -39,15 +39,9 @@
     "url": "https://github.com/avenolazo/envrepair/issues"
   },
   "homepage": "https://github.com/avenolazo/envrepair#readme",
+  "packageManager": "pnpm@9.15.4",
   "engines": {
     "node": ">=20.0.0"
-  },
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^9.15.4",
-      "onFail": "download"
-    }
   },
   "dependencies": {},
   "devDependencies": {
