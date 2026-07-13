@@ -12,6 +12,9 @@
   <a href="https://www.npmjs.com/package/envrepair">
     <img src="https://img.shields.io/npm/v/envrepair.svg?style=flat-square" alt="npm version">
   </a>
+  <a href="https://github.com/avenolazo/envrepair/actions/workflows/ci.yml">
+    <img src="https://github.com/avenolazo/envrepair/actions/workflows/ci.yml/badge.svg" alt="CI Build Status">
+  </a>
   <a href="https://github.com/avenolazo/envrepair/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/avenolazo/envrepair.svg?style=flat-square" alt="license">
   </a>
@@ -27,21 +30,30 @@
   </a>
 </p>
 
-<p align="center">
-  <a href="#installation">Installation</a> •
-  <a href="#quick-start">Quick Start</a> •
-  <a href="#features">Features</a> •
-  <a href="#faq">FAQ</a> •
-  <a href="#command-reference">Command Reference</a> •
-  <a href="CONTRIBUTING.md">Contributing</a>
-</p>
+## Table of Contents
+
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Quick Demo](#quick-demo)
+- [Features](#features)
+- [How It Works](#how-it-works)
+- [Works With](#works-with)
+- [Smart Type Validation](#smart-type-validation)
+- [Optional Variables](#optional-variables)
+- [FAQ](#faq)
+- [Comparison](#comparison)
+- [Command Reference](#command-reference)
+- [Options](#options)
+- [CI/CD Integration](#cicd-integration)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
 Stop crashing your app because your `.env` is out of sync with `.env.example`. envrepair compares your active `.env` against the template, repairs missing variables interactively, then launches your command while preserving comments, spacing, blank lines, and ordering.
 
 <p align="center">
-  <img src="assets/demo.gif" alt="envrepair demo" width="600">
+  <img src="https://raw.githubusercontent.com/avenolazo/envrepair/main/assets/demo.gif" alt="Interactive terminal session demonstrating envrepair identifying missing variables in .env, prompting the user for input, and spawning the development server once repaired." width="600">
 </p>
 
 ## Installation
@@ -120,7 +132,7 @@ $ envrepair next dev
 
 ## Quick Demo
 
-<video src="https://github.com/user-attachments/assets/eb0232f4-8c4c-42a5-bb2a-7c28ee084467" width="100%" controls></video>
+<video src="https://github.com/user-attachments/assets/eb0232f4-8c4c-42a5-bb2a-7c28ee084467" width="100%" controls aria-label="Walkthrough video displaying envrepair running in a real-world local environment setup process"></video>
 
 ## Features
 
@@ -208,15 +220,15 @@ No. `envrepair` is designed for local development. In CI environments it skips p
 
 | Feature                                                    | `envrepair` | `dotenv-safe` | `sync-dotenv` | `envalid` | `t3-env` |
 | :--------------------------------------------------------- | :---------: | :-----------: | :-----------: | :-------: | :------: |
-| **Works as a CLI wrapper**                                 |     ✅      |      ❌       |      ✅       |    ❌     |    ❌    |
-| **Requires explicit validation definition**                |     ❌      |      ❌       |      ❌       |    ✅     |    ✅    |
-| **Auto-repairs missing variables**                         |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Interactive terminal prompts**                           |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Preserves comments, spacing, blank lines, and ordering** |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Input masking for secrets**                              |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Interactive typed input prompts**                        |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
-| **Schema-based validation (Zod, etc.)**                    |     ❌      |      ❌       |      ❌       |    ❌     |    ✅    |
-| **Zero runtime dependencies**                              |     ✅      |      ❌       |      ❌       |    ❌     |    ❌    |
+| **Works as a CLI wrapper**                                 |   ✅ Yes    |     ❌ No     |    ✅ Yes     |   ❌ No   |  ❌ No   |
+| **Requires explicit validation definition**                |    ❌ No    |     ❌ No     |     ❌ No     |  ✅ Yes   |  ✅ Yes  |
+| **Auto-repairs missing variables**                         |   ✅ Yes    |     ❌ No     |     ❌ No     |   ❌ No   |  ❌ No   |
+| **Interactive terminal prompts**                           |   ✅ Yes    |     ❌ No     |     ❌ No     |   ❌ No   |  ❌ No   |
+| **Preserves comments, spacing, blank lines, and ordering** |   ✅ Yes    |     ❌ No     |     ❌ No     |   ❌ No   |  ❌ No   |
+| **Input masking for secrets**                              |   ✅ Yes    |     ❌ No     |     ❌ No     |   ❌ No   |  ❌ No   |
+| **Interactive typed input prompts**                        |   ✅ Yes    |     ❌ No     |     ❌ No     |   ❌ No   |  ❌ No   |
+| **Schema-based validation (Zod, etc.)**                    |    ❌ No    |     ❌ No     |     ❌ No     |   ❌ No   |  ✅ Yes  |
+| **Zero runtime dependencies**                              |   ✅ Yes    |     ❌ No     |     ❌ No     |   ❌ No   |  ❌ No   |
 
 > [!NOTE]
 > `envrepair` focuses on interactive environment setup and automatic repair before your application starts. Tools like `t3-env` and `envalid` focus on validating environment variables inside your application at runtime. These tools solve different problems and can be used together.
@@ -298,4 +310,4 @@ Contributions are welcome! Please check the [Contributing Guidelines](CONTRIBUTI
 
 ## License
 
-[MIT](https://github.com/avenolazo/envrepair/blob/main/LICENSE)
+Distributed under the [MIT License](LICENSE). See [LICENSE](LICENSE) for more details.
