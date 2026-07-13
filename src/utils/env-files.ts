@@ -6,13 +6,17 @@ import path from "node:path"
  */
 export interface EnvFilePaths {
   /**
-   * Absolute path to the active environment file (e.g. .env).
+   * Absolute path to the environment file write target.
    */
   env: string
   /**
    * Absolute path to the template environment file (e.g. .env.example).
    */
   example: string
+  /**
+   * Absolute paths of all existing active env files in cascading order (lowest to highest priority).
+   */
+  activeFiles: string[]
 }
 
 /**
@@ -42,22 +46,72 @@ const findProjectRoot = async (startDir: string): Promise<string> => {
 /**
  * Resolves standard env and example file paths relative to the working directory.
  * Walks upward if no .env.example is found in the current working directory.
+ * Supports environment modes and returns a cascading list of active env files.
  *
  * @param cwd - Working directory to search, defaults to process.cwd().
+ * @param mode - Optional environment mode (e.g. development, production, test).
  * @returns Object containing absolute paths to the environment files.
  */
-export const findEnvFiles = async (cwd: string = process.cwd()): Promise<EnvFilePaths> => {
+export const findEnvFiles = async (
+  cwd: string = process.cwd(),
+  mode?: string,
+): Promise<EnvFilePaths> => {
   const projectRoot = await findProjectRoot(cwd)
-
-  const envLocalPath = path.resolve(projectRoot, ".env.local")
-  const envPath = path.resolve(projectRoot, ".env")
   const examplePath = path.resolve(projectRoot, ".env.example")
 
-  const hasEnvLocal = await fileExists(envLocalPath)
+  const activeFiles: string[] = []
+
+  // 1. .env (lowest priority)
+  const envPath = path.resolve(projectRoot, ".env")
+  activeFiles.push(envPath)
+
+  // 2. .env.${mode} (if mode is set)
+  if (mode) {
+    activeFiles.push(path.resolve(projectRoot, `.env.${mode}`))
+  }
+
+  // 3. .env.local (if mode is not 'test')
+  if (mode !== "test") {
+    activeFiles.push(path.resolve(projectRoot, ".env.local"))
+  }
+
+  // 4. .env.${mode}.local (if mode is set)
+  if (mode) {
+    activeFiles.push(path.resolve(projectRoot, `.env.${mode}.local`))
+  }
+
+  // Filter to only existing files
+  const existingActive: string[] = []
+  for (const file of activeFiles) {
+    if (await fileExists(file)) {
+      existingActive.push(file)
+    }
+  }
+
+  // Default to .env if no active files exist
+  if (existingActive.length === 0) {
+    existingActive.push(envPath)
+  }
+
+  // Determine write target (highest priority existing file, or .env if none exist)
+  let writeTarget = envPath
+  if (mode && (await fileExists(path.resolve(projectRoot, `.env.${mode}.local`)))) {
+    writeTarget = path.resolve(projectRoot, `.env.${mode}.local`)
+  } else if (await fileExists(path.resolve(projectRoot, ".env.local"))) {
+    writeTarget = path.resolve(projectRoot, ".env.local")
+  } else if (mode && (await fileExists(path.resolve(projectRoot, `.env.${mode}`)))) {
+    writeTarget = path.resolve(projectRoot, `.env.${mode}`)
+  } else if (await fileExists(envPath)) {
+    writeTarget = envPath
+  } else {
+    // If no files exist on disk, default write target to .env (or .env.mode if mode set)
+    writeTarget = mode ? path.resolve(projectRoot, `.env.${mode}`) : envPath
+  }
 
   return {
-    env: hasEnvLocal ? envLocalPath : envPath,
+    env: writeTarget,
     example: examplePath,
+    activeFiles: existingActive,
   }
 }
 

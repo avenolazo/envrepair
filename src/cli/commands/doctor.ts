@@ -8,10 +8,10 @@ import { log } from "../../utils/logger.js"
  * Scans example and active files, lists the status of each variable,
  * and exits with code 1 if any required variable is missing.
  *
- * @param envPath - Path to the active env file.
+ * @param envPath - Path or paths to the active env file(s).
  * @param examplePath - Path to the template example file.
  */
-export async function runDoctor(envPath: string, examplePath: string): Promise<void> {
+export async function runDoctor(envPath: string | string[], examplePath: string): Promise<void> {
   const { actual, example, exampleExists } = await loadAndParseEnvs(envPath, examplePath)
 
   if (!exampleExists) {

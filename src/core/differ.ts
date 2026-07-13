@@ -122,14 +122,15 @@ export const compareEnvs = (example: EnvDocument, actual: EnvDocument): DiffResu
     }
   }
 
-  const unused: string[] = []
+  const unusedSet = new Set<string>()
   for (const line of actual) {
     if (line.type === "variable" && line.key !== undefined) {
       if (!exampleVars.has(line.key)) {
-        unused.push(line.key)
+        unusedSet.add(line.key)
       }
     }
   }
+  const unused = Array.from(unusedSet)
 
   return {
     missing,

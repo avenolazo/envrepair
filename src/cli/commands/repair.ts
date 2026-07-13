@@ -10,10 +10,15 @@ import { log } from "../../utils/logger.js"
  * Detects missing variables, prompts the user for inputs (bypassed in CI),
  * and appends values to the active environment file.
  *
- * @param envPath - Path to the active env file.
+ * @param envPath - Path or paths to the active env file(s).
  * @param examplePath - Path to the template example file.
+ * @param writeTarget - Path to the specific file where repairs should be written.
  */
-export async function runRepair(envPath: string, examplePath: string): Promise<void> {
+export async function runRepair(
+  envPath: string | string[],
+  examplePath: string,
+  writeTarget: string,
+): Promise<void> {
   const { actual, example, exampleExists } = await loadAndParseEnvs(envPath, examplePath)
 
   if (!exampleExists) {
@@ -39,8 +44,10 @@ export async function runRepair(envPath: string, examplePath: string): Promise<v
   const answers = await promptForMissing(diff.missing)
 
   if (answers.length > 0) {
-    await appendVariables(envPath, answers)
-    log.success(`Successfully repaired env file. Appended ${answers.length} variable(s).`)
+    await appendVariables(writeTarget, answers)
+    log.success(
+      `Successfully repaired env file. Appended ${answers.length} variable(s) to ${writeTarget}.`,
+    )
   } else {
     log.warn("Repair skipped. No variables were added.")
   }

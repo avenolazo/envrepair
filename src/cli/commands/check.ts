@@ -5,10 +5,10 @@ import { loadAndParseEnvs } from "../loader.js"
  * Runs the 'check' diagnostics command suited for CI pipelines.
  * Outputs the results as JSON and exits with code 1 if any required variables are missing.
  *
- * @param envPath - Path to the active env file.
+ * @param envPath - Path or paths to the active env file(s).
  * @param examplePath - Path to the template example file.
  */
-export async function runCheck(envPath: string, examplePath: string): Promise<void> {
+export async function runCheck(envPath: string | string[], examplePath: string): Promise<void> {
   const { actual, example, exampleExists } = await loadAndParseEnvs(envPath, examplePath)
 
   if (!exampleExists) {

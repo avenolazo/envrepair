@@ -164,4 +164,52 @@ describe("CLI Integration Tests", () => {
     expect(finalContent).toContain("# End config")
     expect(finalContent).toContain("PORT=3000")
   })
+
+  it("should merge variables from both .env and .env.local in cascading order", async () => {
+    const workspaceDir = path.join(tempDir, "cascade-workspace")
+    await fs.mkdir(workspaceDir, { recursive: true })
+
+    await fs.writeFile(path.join(workspaceDir, ".env.example"), "VAR_A=1\nVAR_B=2\n", "utf-8")
+    await fs.writeFile(path.join(workspaceDir, ".env"), "VAR_A=10\n", "utf-8") // Has VAR_A, lacks VAR_B
+    await fs.writeFile(path.join(workspaceDir, ".env.local"), "VAR_B=200\n", "utf-8") // Has VAR_B, lacks VAR_A
+
+    const checkStdout = runCli(["check"], { cwd: workspaceDir })
+    const parsed = JSON.parse(checkStdout)
+    expect(parsed.missing).toHaveLength(0)
+    expect(parsed.synced).toContain("VAR_A")
+    expect(parsed.synced).toContain("VAR_B")
+  })
+
+  it("should support --mode flag and prioritize mode-specific env files", async () => {
+    const workspaceDir = path.join(tempDir, "mode-workspace")
+    await fs.mkdir(workspaceDir, { recursive: true })
+
+    await fs.writeFile(path.join(workspaceDir, ".env.example"), "VAR_A=1\nVAR_B=2\n", "utf-8")
+    await fs.writeFile(path.join(workspaceDir, ".env"), "VAR_A=10\n", "utf-8")
+    await fs.writeFile(path.join(workspaceDir, ".env.development"), "VAR_B=20\n", "utf-8")
+    await fs.writeFile(path.join(workspaceDir, ".env.development.local"), "VAR_A=100\n", "utf-8")
+
+    const checkStdout = runCli(["check", "--mode", "development"], { cwd: workspaceDir })
+    const parsed = JSON.parse(checkStdout)
+    expect(parsed.missing).toHaveLength(0)
+    expect(parsed.synced).toContain("VAR_A")
+    expect(parsed.synced).toContain("VAR_B")
+  })
+
+  it("should initialize .env.example from an existing .env file", async () => {
+    const workspaceDir = path.join(tempDir, "init-workspace")
+    await fs.mkdir(workspaceDir, { recursive: true })
+
+    const envContent = "# Comments\nVAR_A=10\n\n# More comments\nVAR_B=20\n"
+    await fs.writeFile(path.join(workspaceDir, ".env"), envContent, "utf-8")
+
+    runCli(["init"], { cwd: workspaceDir })
+
+    const exampleContent = await fs.readFile(path.join(workspaceDir, ".env.example"), "utf-8")
+    expect(exampleContent).toContain("# Comments")
+    expect(exampleContent).toContain("VAR_A=")
+    expect(exampleContent).not.toContain("VAR_A=10")
+    expect(exampleContent).toContain("VAR_B=")
+    expect(exampleContent).not.toContain("VAR_B=20")
+  })
 })

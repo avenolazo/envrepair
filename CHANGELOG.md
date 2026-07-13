@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.8] - 2026-07-13
+
+### Added
+
+- Added multi-environment cascading support: automatically discovers and merges split variables from multiple active environment files (`.env` < `.env.development` < `.env.local` < `.env.development.local`) in standard priority order.
+- Added `--mode` / `-m` flag to specify environment-specific configuration modes (e.g. `development`, `production`, `test`).
+- Added `init` command to bootstrap `.env.example` templates by parsing an active `.env` file, preserving formatting/comments, and stripping variable values.
+- Configured continuous integration automation in `.github/workflows/ci.yml` verifying builds, tests, lints, and format rules.
+- Created `SECURITY.md` defining supported versions and secure vulnerability disclosure channels.
+
+### Fixed
+
+- Resolved ESLint `no-control-regex` validation errors in integration tests by dynamically constructing ANSI-stripping regular expressions using runtime character codes (`String.fromCharCode`).
+
 ## [0.1.7] - 2026-07-11
 
 ### Fixed

@@ -11,12 +11,12 @@ interface DiffOptions {
  * Outputs the differences between active and example environment files
  * as human-readable text or structured JSON.
  *
- * @param envPath - Path to the active env file.
+ * @param envPath - Path or paths to the active env file(s).
  * @param examplePath - Path to the template example file.
  * @param options - CLI options (e.g. `--json`).
  */
 export async function runDiff(
-  envPath: string,
+  envPath: string | string[],
   examplePath: string,
   options: DiffOptions,
 ): Promise<void> {
