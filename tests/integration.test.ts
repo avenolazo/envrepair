@@ -212,4 +212,31 @@ describe("CLI Integration Tests", () => {
     expect(exampleContent).toContain("VAR_B=")
     expect(exampleContent).not.toContain("VAR_B=20")
   })
+
+  it("should respect overrides configured in package.json under envrepair key", async () => {
+    const workspaceDir = path.join(tempDir, "config-workspace")
+    await fs.mkdir(workspaceDir, { recursive: true })
+
+    // Setup custom target files
+    await fs.writeFile(
+      path.join(workspaceDir, "package.json"),
+      JSON.stringify({
+        name: "test-pkg",
+        envrepair: {
+          env: "custom.env",
+          example: "custom.env.example",
+        },
+      }),
+      "utf-8",
+    )
+
+    await fs.writeFile(path.join(workspaceDir, "custom.env.example"), "VAR_X=1\nVAR_Y=2\n", "utf-8")
+    await fs.writeFile(path.join(workspaceDir, "custom.env"), "VAR_X=10\nVAR_Y=20\n", "utf-8")
+
+    const checkStdout = runCli(["check"], { cwd: workspaceDir })
+    const parsed = JSON.parse(checkStdout)
+    expect(parsed.missing).toHaveLength(0)
+    expect(parsed.synced).toContain("VAR_X")
+    expect(parsed.synced).toContain("VAR_Y")
+  })
 })

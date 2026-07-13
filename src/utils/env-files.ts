@@ -20,15 +20,19 @@ export interface EnvFilePaths {
 }
 
 /**
- * Searches upward from a starting directory to find the closest directory containing .env.example.
+ * Searches upward from a starting directory to find the closest directory containing package.json or .env.example.
  * This ensures the CLI finds the correct repository root config when run from subdirectories.
  *
  * @param startDir - The directory path to begin the upward search.
- * @returns The directory path where .env.example was found, or the original startDir as a fallback.
+ * @returns The directory path where package.json or .env.example was found, or the original startDir as a fallback.
  */
-const findProjectRoot = async (startDir: string): Promise<string> => {
+export const findProjectRoot = async (startDir: string): Promise<string> => {
   let dir = startDir
   while (true) {
+    const hasPkg = await fileExists(path.join(dir, "package.json"))
+    if (hasPkg) {
+      return dir
+    }
     const hasExample = await fileExists(path.join(dir, ".env.example"))
     if (hasExample) {
       return dir

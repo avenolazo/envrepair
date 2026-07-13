@@ -45,6 +45,7 @@
 - [Command Reference](#command-reference)
 - [Options](#options)
 - [Multi-Environment Support](#multi-environment-support)
+- [Configuration](#configuration)
 - [CI/CD Integration](#cicd-integration)
 - [Contributing](#contributing)
 - [License](#license)
@@ -317,6 +318,32 @@ When you run `envrepair` without file path overrides, it scans and merges variab
 4. `.env.${mode}.local` (highest priority; if `--mode` is specified)
 
 Any missing variables identified will be appended to the highest priority existing override file on disk (defaulting to `.env` or `.env.${mode}`).
+
+## Configuration
+
+You can customize `envrepair` defaults for your project directly inside your `package.json` file. This is highly useful if you store environment files in custom directories or use custom names.
+
+Add an `"envrepair"` key to your `package.json`:
+
+```json
+{
+  "name": "your-project",
+  "envrepair": {
+    "env": ".config/local.env",
+    "example": ".env.template",
+    "mode": "development"
+  }
+}
+```
+
+### Configuration Options
+
+- `env` (string): Relative path to the target environment file (e.g. `.env`, `.config/local.env`).
+- `example` (string): Relative path to the template environment file (e.g. `.env.example`, `.env.template`).
+- `mode` (string): Default environment mode (e.g. `development`, `production`).
+
+> [!NOTE]
+> Command line arguments (like `-e`, `-x`, or `-m`) will always override settings defined in `package.json`.
 
 ## CI/CD Integration
 

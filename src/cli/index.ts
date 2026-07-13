@@ -1,8 +1,9 @@
 import { Command } from "commander"
 import path from "node:path"
 import { readFileSync } from "node:fs"
+import fs from "node:fs/promises"
 import { fileURLToPath } from "node:url"
-import { findEnvFiles, fileExists } from "../utils/env-files.js"
+import { findEnvFiles, fileExists, findProjectRoot } from "../utils/env-files.js"
 import { compareEnvs } from "../core/differ.js"
 import { appendVariables } from "../core/writer.js"
 import { loadAndParseEnvs } from "./loader.js"
@@ -31,11 +32,34 @@ interface ResolvedPaths {
 }
 
 async function resolvePaths(opts: any): Promise<ResolvedPaths> {
-  const resolved = await findEnvFiles(process.cwd(), opts.mode)
+  const projectRoot = await findProjectRoot(process.cwd())
+  const projectPkgPath = path.resolve(projectRoot, "package.json")
+  let projectConfig: any = {}
+  try {
+    if (await fileExists(projectPkgPath)) {
+      const pkgContent = JSON.parse(await fs.readFile(projectPkgPath, "utf-8"))
+      projectConfig = pkgContent.envrepair || {}
+    }
+  } catch {
+    // Ignore configuration loading errors
+  }
+
+  const mode = opts.mode || projectConfig.mode
+  const envOverride =
+    opts.env ? opts.env
+    : projectConfig.env ? path.resolve(projectRoot, projectConfig.env)
+    : undefined
+
+  const exampleOverride =
+    opts.example ? opts.example
+    : projectConfig.example ? path.resolve(projectRoot, projectConfig.example)
+    : undefined
+
+  const resolved = await findEnvFiles(process.cwd(), mode)
   return {
-    env: opts.env ? opts.env : resolved.activeFiles,
-    writeTarget: opts.env ? opts.env : resolved.env,
-    example: opts.example ? opts.example : resolved.example,
+    env: envOverride ? envOverride : resolved.activeFiles,
+    writeTarget: envOverride ? envOverride : resolved.env,
+    example: exampleOverride ? exampleOverride : resolved.example,
   }
 }
 
@@ -85,8 +109,28 @@ program
   .description("Initialize .env.example template from an existing .env file")
   .action(async () => {
     const opts = program.opts()
-    const env = opts.env ? opts.env : path.resolve(process.cwd(), ".env")
-    const example = opts.example ? opts.example : path.resolve(process.cwd(), ".env.example")
+    const projectRoot = await findProjectRoot(process.cwd())
+    const projectPkgPath = path.resolve(projectRoot, "package.json")
+    let projectConfig: any = {}
+    try {
+      if (await fileExists(projectPkgPath)) {
+        const pkgContent = JSON.parse(await fs.readFile(projectPkgPath, "utf-8"))
+        projectConfig = pkgContent.envrepair || {}
+      }
+    } catch {
+      // Ignore configuration loading errors
+    }
+
+    const env =
+      opts.env ? opts.env
+      : projectConfig.env ? path.resolve(projectRoot, projectConfig.env)
+      : path.resolve(process.cwd(), ".env")
+
+    const example =
+      opts.example ? opts.example
+      : projectConfig.example ? path.resolve(projectRoot, projectConfig.example)
+      : path.resolve(process.cwd(), ".env.example")
+
     const { runInit } = await import("./commands/init.js")
     await runInit(env, example)
   })
