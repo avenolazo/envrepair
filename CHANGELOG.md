@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-07-13
+
+### Fixed
+
+- Resolved path resolution bugs when `env` property in `package.json` config is defined as an array of strings.
+- Added JSDoc comments to resolvePaths in `src/cli/index.ts`.
+- Documented package.json config array capability and shell-less execution in `README.md`.
+
 ## [0.2.0] - 2026-07-13
 
 ### Added
