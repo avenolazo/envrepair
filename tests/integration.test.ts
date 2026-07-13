@@ -5,6 +5,13 @@ import { fileURLToPath } from "node:url"
 import { describe, it, expect, beforeEach, afterEach } from "vitest"
 import { appendVariables } from "../src/core/writer.js"
 
+const stripAnsi = (str: string): string => {
+  const esc = String.fromCharCode(27)
+  const osc = String.fromCharCode(155)
+  const pattern = `[${esc}${osc}][\\[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]`
+  return str.replace(new RegExp(pattern, "g"), "")
+}
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const tempDir = path.join(__dirname, "temp-integration-tests")
@@ -51,7 +58,7 @@ describe("CLI Integration Tests", () => {
 
     expect(error).toBeDefined()
     expect(error.status).toBe(1)
-    const stdout = error.stdout.toString()
+    const stdout = stripAnsi(error.stdout.toString())
     expect(stdout).toContain("Environment Diagnosis")
     expect(stdout).toContain("DB_URL (missing)")
     expect(stdout).toContain("PORT (missing)")
@@ -84,7 +91,7 @@ describe("CLI Integration Tests", () => {
     await fs.writeFile(envPath, "DB_URL=postgres://prod\nPORT=3000\n", "utf-8")
 
     // Test doctor command succeeds.
-    const doctorStdout = runCli(["--env", envPath, "--example", examplePath, "doctor"])
+    const doctorStdout = stripAnsi(runCli(["--env", envPath, "--example", examplePath, "doctor"]))
     expect(doctorStdout).toContain("Environment is healthy and fully synced.")
 
     // Test check command succeeds and outputs JSON with empty missing array.
@@ -123,7 +130,7 @@ describe("CLI Integration Tests", () => {
     await fs.writeFile(envPath, "DB_URL=postgres://prod\nPORT=3000\nEXTRA_VAR=some_val\n", "utf-8")
 
     // Test doctor command succeeds (exit code 0) even with unused variables.
-    const doctorStdout = runCli(["--env", envPath, "--example", examplePath, "doctor"])
+    const doctorStdout = stripAnsi(runCli(["--env", envPath, "--example", examplePath, "doctor"]))
     expect(doctorStdout).toContain("Environment is healthy and fully synced.")
     expect(doctorStdout).toContain("EXTRA_VAR (unused)")
   })
