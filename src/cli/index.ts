@@ -1,5 +1,7 @@
 import { Command } from "commander"
 import path from "node:path"
+import { readFileSync } from "node:fs"
+import { fileURLToPath } from "node:url"
 import { findEnvFiles, fileExists } from "../utils/env-files.js"
 import { compareEnvs } from "../core/differ.js"
 import { appendVariables } from "../core/writer.js"
@@ -9,12 +11,15 @@ import { launchProcess } from "../runner/proxy.js"
 import { isCI } from "../utils/ci.js"
 import { log } from "../utils/logger.js"
 
+const pkgPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../package.json")
+const pkg = JSON.parse(readFileSync(pkgPath, "utf-8"))
+
 const program = new Command()
 
 program
   .name("envrepair")
   .description("Self-healing environment configuration manager for local development")
-  .version("0.1.8")
+  .version(pkg.version)
   .option("-e, --env <path>", "Path to the environment file")
   .option("-x, --example <path>", "Path to the example template file")
   .option("-m, --mode <name>", "Environment mode (e.g. development, production, test)")

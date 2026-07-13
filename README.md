@@ -44,6 +44,7 @@
 - [Comparison](#comparison)
 - [Command Reference](#command-reference)
 - [Options](#options)
+- [Multi-Environment Support](#multi-environment-support)
 - [CI/CD Integration](#cicd-integration)
 - [Contributing](#contributing)
 - [License](#license)
@@ -289,11 +290,33 @@ envrepair check
 
 Runs validation without interactive prompts, outputs differences in JSON, and exits with status 1 if variables are missing. Designed for CI/CD scripting.
 
+### init
+
+```bash
+envrepair init
+```
+
+Bootstraps a `.env.example` template by parsing an active `.env` file, preserving all spacing, comments, and structure while stripping the values of all variables.
+
 ## Options
 
-- `-e, --env <path>`: Path to the active env file (defaults to `.env`).
+- `-e, --env <path>`: Path to the active env file.
 - `-x, --example <path>`: Path to the template example file (defaults to `.env.example`).
+- `-m, --mode <name>`: Specifies environment mode (e.g. `development`, `production`). Resolves cascading files matching the mode.
 - `-h, --help`: Displays help information.
+
+## Multi-Environment Support
+
+`envrepair` automatically supports multi-environment configurations using priority-based cascading resolution, mirroring standard frameworks (such as Next.js and Vite).
+
+When you run `envrepair` without file path overrides, it scans and merges variables from existing active files in the following priority order (from lowest to highest):
+
+1. `.env` (lowest priority)
+2. `.env.${mode}` (if `--mode` is specified)
+3. `.env.local` (local overrides; skipped if `--mode test` is used)
+4. `.env.${mode}.local` (highest priority; if `--mode` is specified)
+
+Any missing variables identified will be appended to the highest priority existing override file on disk (defaulting to `.env` or `.env.${mode}`).
 
 ## CI/CD Integration
 
