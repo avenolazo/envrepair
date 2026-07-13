@@ -9,13 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Updated CLI entry to dynamically resolve program version from `package.json` at runtime, preventing manual synchronization overhead.
+- Expanded `README.md` to document the new `init` command, the `--mode` flag, and multi-environment cascading rules.
+
+## [0.1.8] - 2026-07-13
+
+### Added
+
 - Added multi-environment cascading support: automatically discovers and merges split variables from multiple active environment files (`.env` < `.env.development` < `.env.local` < `.env.development.local`) in standard priority order.
 - Added `--mode` / `-m` flag to specify environment-specific configuration modes (e.g. `development`, `production`, `test`).
 - Added `init` command to bootstrap `.env.example` templates by parsing an active `.env` file, preserving formatting/comments, and stripping variable values.
 - Configured continuous integration automation in `.github/workflows/ci.yml` verifying builds, tests, lints, and format rules.
 - Created `SECURITY.md` defining supported versions and secure vulnerability disclosure channels.
-- Updated CLI entry to dynamically resolve program version from `package.json` at runtime, preventing manual synchronization overhead.
-- Expanded `README.md` to document the new `init` command, the `--mode` flag, and multi-environment cascading rules.
 
 ### Fixed
 
