@@ -329,7 +329,7 @@ Add an `"envrepair"` key to your `package.json`:
 {
   "name": "your-project",
   "envrepair": {
-    "env": ".config/local.env",
+    "env": [".env", ".env.local"],
     "example": ".env.template",
     "mode": "development"
   }
@@ -338,12 +338,15 @@ Add an `"envrepair"` key to your `package.json`:
 
 ### Configuration Options
 
-- `env` (string): Relative path to the target environment file (e.g. `.env`, `.config/local.env`).
+- `env` (string | string[]): Relative path or array of relative paths to the target environment files.
 - `example` (string): Relative path to the template environment file (e.g. `.env.example`, `.env.template`).
 - `mode` (string): Default environment mode (e.g. `development`, `production`).
 
 > [!NOTE]
 > Command line arguments (like `-e`, `-x`, or `-m`) will always override settings defined in `package.json`.
+
+> [!IMPORTANT]
+> **Shell-less command execution**: `envrepair` spawns target commands directly without a shell wrapper (similar to `cross-env`) to avoid command injection vulnerabilities and platform inconsistencies. Custom shell aliases or built-in terminal functions (e.g. shell-specific profiles) are not inherited by the runner.
 
 ## CI/CD Integration
 

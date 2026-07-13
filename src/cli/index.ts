@@ -31,6 +31,14 @@ interface ResolvedPaths {
   example: string
 }
 
+/**
+ * Resolves paths for target active environment files and template example files.
+ * Checks CLI override options first, then falls back to project configuration definitions
+ * under the "envrepair" key in the root package.json, before falling back to default resolution.
+ *
+ * @param opts - Commander option overrides (e.g. env, example, mode).
+ * @returns An object containing the environment files array, write target file, and example template file paths.
+ */
 async function resolvePaths(opts: any): Promise<ResolvedPaths> {
   const projectRoot = await findProjectRoot(process.cwd())
   const projectPkgPath = path.resolve(projectRoot, "package.json")
@@ -47,7 +55,10 @@ async function resolvePaths(opts: any): Promise<ResolvedPaths> {
   const mode = opts.mode || projectConfig.mode
   const envOverride =
     opts.env ? opts.env
-    : projectConfig.env ? path.resolve(projectRoot, projectConfig.env)
+    : projectConfig.env ?
+      Array.isArray(projectConfig.env) ?
+        projectConfig.env.map((f: string) => path.resolve(projectRoot, f))
+      : path.resolve(projectRoot, projectConfig.env)
     : undefined
 
   const exampleOverride =
@@ -123,7 +134,10 @@ program
 
     const env =
       opts.env ? opts.env
-      : projectConfig.env ? path.resolve(projectRoot, projectConfig.env)
+      : projectConfig.env ?
+        Array.isArray(projectConfig.env) ?
+          path.resolve(projectRoot, projectConfig.env[0])
+        : path.resolve(projectRoot, projectConfig.env)
       : path.resolve(process.cwd(), ".env")
 
     const example =

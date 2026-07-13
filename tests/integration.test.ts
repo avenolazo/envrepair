@@ -239,4 +239,32 @@ describe("CLI Integration Tests", () => {
     expect(parsed.synced).toContain("VAR_X")
     expect(parsed.synced).toContain("VAR_Y")
   })
+
+  it("should respect array overrides configured in package.json for multi-file cascading", async () => {
+    const workspaceDir = path.join(tempDir, "config-array-workspace")
+    await fs.mkdir(workspaceDir, { recursive: true })
+
+    // Setup custom target files
+    await fs.writeFile(
+      path.join(workspaceDir, "package.json"),
+      JSON.stringify({
+        name: "test-pkg-array",
+        envrepair: {
+          env: ["custom.env", "custom.env.local"],
+          example: "custom.env.example",
+        },
+      }),
+      "utf-8",
+    )
+
+    await fs.writeFile(path.join(workspaceDir, "custom.env.example"), "VAR_X=1\nVAR_Y=2\n", "utf-8")
+    await fs.writeFile(path.join(workspaceDir, "custom.env"), "VAR_X=10\n", "utf-8")
+    await fs.writeFile(path.join(workspaceDir, "custom.env.local"), "VAR_Y=20\n", "utf-8")
+
+    const checkStdout = runCli(["check"], { cwd: workspaceDir })
+    const parsed = JSON.parse(checkStdout)
+    expect(parsed.missing).toHaveLength(0)
+    expect(parsed.synced).toContain("VAR_X")
+    expect(parsed.synced).toContain("VAR_Y")
+  })
 })
